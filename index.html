@@ -31,7 +31,7 @@
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overscroll-behavior:none;transition:background .2s,color .2s}
-#app{max-width:430px;margin:0 auto;height:100%;display:flex;flex-direction:column;background:var(--bg);position:relative}
+#app{max-width:430px;margin:0 auto;min-height:100%;height:100%;display:flex;flex-direction:column;background:var(--bg);position:relative;overflow:hidden}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -41,9 +41,10 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 
 /* ── SCREENS ── */
-.scr{flex:1;overflow-y:auto;padding:18px 18px 110px;scrollbar-width:none}
+.scr{flex:1;overflow-y:auto;padding:18px 18px 110px;scrollbar-width:none;min-height:0;width:100%;animation:fadeUp .35s ease both}
+#scrScan{padding-bottom:14px;overflow:hidden;display:flex;flex-direction:column}
 .scr::-webkit-scrollbar{display:none}
-.scr.hidden{display:none}
+.scr.hidden{display:none !important}
 
 /* ── BRAND ROW ── */
 .brand-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -67,19 +68,33 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .app-sub{font-size:14px;color:var(--text4);margin-top:7px}
 
 /* ── MULTI PHOTO ── */
-.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;animation:fadeUp .4s .05s ease both}
-.photo-slot{aspect-ratio:1;border-radius:14px;border:1.5px dashed var(--border3);background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s}
-.photo-slot:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:auto;min-height:160px}
-.photo-slot:hover{border-color:var(--lime)}
-.photo-slot.filled{border-style:solid;border-color:var(--border2)}
-.photo-slot img{width:100%;height:100%;object-fit:cover;border-radius:12px;display:block}
-.photo-slot input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2}
-.photo-slot-icon{display:flex;flex-direction:column;align-items:center;gap:5px}
-.photo-slot-icon i{font-size:22px;color:var(--lime)}
-.photo-slot-icon span{font-size:10px;font-weight:700;color:var(--text4)}
-.photo-slot-icon.small i{font-size:16px}
-.photo-remove{position:absolute;top:6px;right:6px;z-index:3;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.82);border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:13px;font-weight:700;line-height:1}
-.photo-count{font-size:12px;color:var(--text4);margin-top:8px;animation:fadeUp .3s ease both}
+.photo-grid{position:relative;margin-top:14px;animation:fadeUp .4s .05s ease both;flex:1;min-height:0;display:flex;flex-direction:column}
+.photo-main{position:relative;flex:1;min-height:200px;border-radius:18px;overflow:hidden;background:var(--bg2);border:1.5px dashed var(--border3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s}
+.photo-main:hover{border-color:var(--lime)}
+.photo-main.filled{border-style:solid;border-color:var(--border2)}
+.photo-main-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.photo-main-placeholder{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:24px;pointer-events:none;z-index:1}
+.photo-slot-main-icon{width:68px;height:68px;border-radius:18px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+.photo-slot-main-icon i{font-size:30px;color:var(--lime)}
+.upload-main-label{font-size:15px;font-weight:700;color:var(--text)}
+.upload-main-sub{font-size:12.5px;color:var(--text4);line-height:1.5}
+.photo-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px;transition:all .15s;opacity:.35}
+.photo-arrow.visible{opacity:1}
+.photo-arrow i{pointer-events:none;line-height:1}
+.photo-delete-main{position:absolute;top:10px;right:10px;z-index:6;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.7);border:1.5px solid rgba(255,255,255,.2);display:none;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:14px;font-weight:700;line-height:1}
+.photo-delete-main.visible{display:flex}
+.photo-arrow-left{left:10px}
+.photo-arrow-right{right:10px}
+.photo-thumbs{position:absolute;bottom:10px;left:10px;display:flex;flex-direction:row;gap:6px;z-index:4}
+.photo-thumb{width:52px;height:52px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid rgba(255,255,255,.2);transition:border-color .15s;flex-shrink:0}
+.photo-thumb.active{border-color:var(--lime)}
+.photo-thumb.empty{background:rgba(0,0,0,.45);backdrop-filter:blur(8px);border:1.5px dashed rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center}
+.photo-thumb.empty i{font-size:18px;color:rgba(255,255,255,.35);pointer-events:none}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-thumb-add{width:52px;height:52px;border-radius:10px;border:1.5px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.45);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;position:relative}
+.photo-thumb-add i{font-size:18px;color:rgba(255,255,255,.35);pointer-events:none}
+.photo-thumb-add input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;width:100%;height:100%}
+.photo-count{font-size:12px;color:var(--text4);margin-top:6px}
 .photo-count strong{color:var(--lime)}
 
 .scan-btn{width:100%;padding:17px;border-radius:16px;background:var(--lime);border:none;color:#0d0d0d;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s,filter .15s;letter-spacing:-.2px;margin-top:14px;animation:fadeUp .4s .1s ease both}
@@ -89,9 +104,9 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .scan-btn i{font-size:18px}
 
 /* ── ONBOARDING ── */
-#onboarding{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);display:flex;align-items:flex-end;justify-content:center;max-width:430px;margin:0 auto}
+#onboarding{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);display:flex;align-items:flex-end;justify-content:center;max-width:430px;margin:0 auto}
 #onboarding.hidden{display:none}
-.onboard-card{background:var(--bg2);border-radius:28px 28px 0 0;padding:0 0 40px;width:100%;border:1px solid var(--border2);border-bottom:none;overflow:hidden;animation:onboardIn .4s cubic-bezier(.34,1.2,.64,1) both}
+.onboard-card{background:var(--bg2);border-radius:28px 28px 0 0;padding:0 0 40px;width:100%;border:1px solid var(--border2);border-bottom:none;overflow:hidden;animation:onboardIn .4s cubic-bezier(.34,1.2,.64,1) both;position:relative;z-index:100}
 .onboard-img{width:100%;height:200px;object-fit:cover;display:block;background:linear-gradient(135deg,#1a2600,#0d1a00)}
 .onboard-img-placeholder{width:100%;height:180px;background:linear-gradient(135deg,#0d1a00 0%,#1a2600 50%,#0d0d0d 100%);display:flex;align-items:center;justify-content:center}
 .onboard-img-placeholder i{font-size:64px;color:var(--lime);opacity:.6}
@@ -282,6 +297,63 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .admob-banner.show{display:flex}
 #admob-placeholder{width:320px;height:50px;background:var(--bg3);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text4)}
 
+
+/* ── SETTINGS SCREEN ── */
+.settings-section{margin-bottom:20px}
+.settings-section-title{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text4);margin-bottom:10px;display:block}
+.settings-row{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:8px;cursor:pointer}
+.settings-row-left{display:flex;flex-direction:column;gap:3px}
+.settings-row-label{font-size:14px;font-weight:600;color:var(--text)}
+.settings-row-sub{font-size:12px;color:var(--text4)}
+.settings-row-right{display:flex;align-items:center;gap:8px}
+.settings-row-value{font-size:13px;font-weight:700;color:var(--lime)}
+
+/* Currency picker */
+.currency-picker-btn{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color .15s;width:100%}
+.currency-picker-btn:hover{border-color:var(--lime)}
+.currency-picker-left{display:flex;align-items:center;gap:10px}
+.currency-picker-flag{font-size:22px;line-height:1}
+.currency-picker-info{display:flex;flex-direction:column;gap:2px}
+.currency-picker-name{font-size:14px;font-weight:700;color:var(--text)}
+.currency-picker-code{font-size:12px;color:var(--text4)}
+.currency-picker-arrow{font-size:18px;color:var(--text4);transition:transform .2s}
+.currency-picker-arrow.open{transform:rotate(180deg)}
+
+/* Currency dropdown */
+.currency-dropdown{position:absolute;left:0;right:0;z-index:50;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;overflow:hidden;max-height:0;transition:max-height .3s ease;margin-top:6px;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.currency-dropdown.open{max-height:320px;overflow-y:auto}
+.currency-search{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;position:sticky;top:0;background:var(--bg2);z-index:1}
+.currency-search i{font-size:16px;color:var(--text4)}
+.currency-search input{background:none;border:none;outline:none;font-size:14px;color:var(--text);font-family:inherit;width:100%}
+.currency-search input::placeholder{color:var(--text4)}
+.currency-option{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;transition:background .12s;border-bottom:1px solid var(--border)}
+.currency-option:last-child{border-bottom:none}
+.currency-option:hover{background:var(--bg3)}
+.currency-option.active{background:var(--lime-bg)}
+.currency-option-flag{font-size:20px;line-height:1;flex-shrink:0}
+.currency-option-info{flex:1}
+.currency-option-name{font-size:13px;font-weight:600;color:var(--text)}
+.currency-option-code{font-size:11px;color:var(--text4)}
+.currency-option-check{font-size:16px;color:var(--lime);opacity:0}
+.currency-option.active .currency-option-check{opacity:1}
+
+/* Toggle */
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--border3);border-radius:100px;cursor:pointer;transition:.2s}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle-switch input:checked + .toggle-slider{background:var(--lime)}
+.toggle-switch input:checked + .toggle-slider::before{transform:translateX(20px)}
+
+
+.upload-icons-row{display:flex;align-items:center;gap:20px;margin-bottom:14px;pointer-events:none}
+.upload-icon-btn{display:flex;flex-direction:column;align-items:center;gap:7px}
+.upload-icon-btn i{font-size:32px;color:var(--lime)}
+.upload-icon-btn span{font-size:11px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:.6px}
+.upload-divider{width:1px;height:40px;background:var(--border2)}
+.upload-main-label{font-size:15px;font-weight:700;color:var(--text);text-align:center}
+.upload-main-sub{font-size:12.5px;color:var(--text4);text-align:center;margin-top:4px}
+
 /* ── TOAST ── */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-10px);background:#ff4444;color:#fff;font-size:13px;font-weight:700;padding:11px 20px;border-radius:100px;white-space:nowrap;opacity:0;pointer-events:none;transition:all .25s;z-index:200;display:flex;align-items:center;gap:7px;max-width:90vw}
 .toast i{font-size:15px}
@@ -314,7 +386,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
             <div class="onboard-step-text">Get a price + ready-to-post description</div>
           </div>
         </div>
-        <button class="onboard-btn" onclick="dismissOnboarding()">Let's go →</button>
+        <button class="onboard-btn" onclick="localStorage.setItem('qs_onboarded','1');document.getElementById('onboarding').style.display='none'" style="position:relative;z-index:200;pointer-events:all">Let's go →</button>
       </div>
     </div>
   </div>
@@ -340,10 +412,21 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
     </div>
 
     <div class="photo-grid" id="photoGrid">
-      <!-- slots injected by JS -->
+      <div class="photo-main" id="photoMain" onclick="mainPhotoClick()">
+        <img class="photo-main-img" id="photoMainImg" alt="">
+        <div class="photo-main-placeholder" id="photoMainPlaceholder">
+          <div class="photo-slot-main-icon"><i class="ti ti-camera"></i></div>
+          <div class="upload-main-label">Take or upload a photo</div>
+          <div class="upload-main-sub">Any item, any condition</div>
+        </div>
+        <button class="photo-delete-main" id="photoDeleteMain" onclick="event.stopPropagation();deleteMainPhoto()">&#x2715;</button>
+        <button class="photo-arrow photo-arrow-left" id="arrowLeft" onclick="event.stopPropagation();slidePhoto(-1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+        <button class="photo-arrow photo-arrow-right" id="arrowRight" onclick="event.stopPropagation();slidePhoto(1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+        <div class="photo-thumbs" id="photoThumbs"></div>
+      </div>
+      <input type="file" id="mainFileInput" accept="image/*" capture="environment" style="display:none" onchange="addPhotoFromInput(this)">
     </div>
     <div class="photo-count" id="photoCount"></div>
-
     <button class="scan-btn" id="scanBtn" disabled onclick="analyzeImage()">
       <i class="ti ti-bolt"></i> Get price estimate
     </button>
@@ -386,6 +469,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
   <div class="scr hidden" id="scrHistory">
     <div class="screen-hd">
       <div class="screen-hd-title">History</div>
+      <button onclick="clearHistory()" style="background:none;border:none;font-size:13px;font-weight:700;color:var(--text4);cursor:pointer;padding:4px 0" id="clearHistBtn">Clear all</button>
     </div>
     <div id="histList"></div>
   </div>
@@ -428,12 +512,80 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
   </div>
 
   <!-- ── NAV ── -->
+<!-- ── SETTINGS ── -->
+  <div class="scr hidden" id="scrSettings">
+    <div class="screen-hd">
+      <div class="back-link" onclick="showScreen('scrScan')"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="screen-hd-title">Settings</div>
+      <div style="width:48px"></div>
+    </div>
+
+    <div class="settings-section" style="position:relative">
+      <span class="settings-section-title">Currency</span>
+      <button class="currency-picker-btn" onclick="toggleCurrencyDropdown()">
+        <div class="currency-picker-left">
+          <div class="currency-picker-flag" id="pickerFlag"></div>
+          <div class="currency-picker-info">
+            <div class="currency-picker-name" id="pickerName">US Dollar</div>
+            <div class="currency-picker-code" id="pickerCode">USD · $</div>
+          </div>
+        </div>
+        <i class="ti ti-chevron-down currency-picker-arrow" id="pickerArrow"></i>
+      </button>
+      <div class="currency-dropdown" id="currencyDropdown">
+        <div class="currency-search">
+          <i class="ti ti-search"></i>
+          <input type="text" placeholder="Search currency..." id="currencySearch" oninput="filterCurrencies(this.value)">
+        </div>
+        <div id="currencyList"></div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <span class="settings-section-title">Appearance</span>
+      <div class="settings-row" onclick="toggleTheme()" style="cursor:pointer">
+        <div class="settings-row-left">
+          <div class="settings-row-label">Dark mode</div>
+          <div class="settings-row-sub">Easy on the eyes</div>
+        </div>
+        <label class="toggle-switch" onclick="event.stopPropagation()">
+          <input type="checkbox" id="darkModeToggle" onchange="toggleTheme()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <span class="settings-section-title">Account</span>
+      <div class="settings-row" onclick="showScreen('scrCredits')">
+        <div class="settings-row-left">
+          <div class="settings-row-label">Credits</div>
+          <div class="settings-row-sub" id="settingsCreditsLabel">—</div>
+        </div>
+        <i class="ti ti-chevron-right" style="color:var(--text4)"></i>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <span class="settings-section-title">About</span>
+      <div class="settings-row" style="cursor:default">
+        <div class="settings-row-left">
+          <div class="settings-row-label">Version</div>
+          <div class="settings-row-sub">QuickSell 1.0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <nav class="nav" id="mainNav">
     <button class="nav-btn active" id="navScan" onclick="switchTab('scrScan','navScan')">
       <i class="ti ti-camera"></i>Scan
     </button>
     <button class="nav-btn" id="navHistory" onclick="switchTab('scrHistory','navHistory')">
       <i class="ti ti-history"></i>History
+    </button>
+    <button class="nav-btn" id="navSettings" onclick="switchTab('scrSettings','navSettings')">
+      <i class="ti ti-settings"></i>Settings
     </button>
   </nav>
 
@@ -442,6 +594,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
     <div id="admob-placeholder">Ad space</div>
   </div>
 </div>
+
 
 <!-- ── PAYWALL ── -->
 <div class="paywall-overlay" id="paywallOverlay">
@@ -458,8 +611,874 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 
 <div class="toast" id="toast"></div>
 
-<script src="credits.js"></script>
-<script src="app.js"></script>
+<script>
+// ── CREDITS SYSTEM ──
+const KEYS = { credits: 'quicksell_credits', freeScans: 'quicksell_free', history: 'quicksell_history' };
+const FREE_TOTAL = 3;
+const COST_PER_SCAN = 5;
+const PACKS = {
+  starter: { credits: 50, bonus: 10, price: 2.99 },
+  value:   { credits: 150, bonus: 20, price: 6.99 },
+  power:   { credits: 400, bonus: 75, price: 14.99 },
+};
+
+function getCredits() { return parseInt(localStorage.getItem(KEYS.credits) || '0', 10); }
+function setCredits(n) { localStorage.setItem(KEYS.credits, String(Math.max(0, n))); refreshUI(); }
+function getFreeLeft() { const used = parseInt(localStorage.getItem(KEYS.freeScans) || '0', 10); return Math.max(0, FREE_TOTAL - used); }
+function canScan() { return getFreeLeft() > 0 || getCredits() >= COST_PER_SCAN; }
+
+function consumeScan() {
+  const free = getFreeLeft();
+  if (free > 0) {
+    const used = parseInt(localStorage.getItem(KEYS.freeScans) || '0', 10);
+    localStorage.setItem(KEYS.freeScans, String(used + 1));
+    refreshUI(); return true;
+  }
+  const c = getCredits();
+  if (c >= COST_PER_SCAN) { setCredits(c - COST_PER_SCAN); return true; }
+  return false;
+}
+
+function buyPack(id) {
+  const p = PACKS[id];
+  if (!p) return;
+  setCredits(getCredits() + p.credits + p.bonus);
+  showToast(`+${p.credits + p.bonus} credits added`);
+}
+
+function getHistory() { try { return JSON.parse(localStorage.getItem(KEYS.history) || '[]'); } catch { return []; } }
+function addHistory(entry) {
+  const h = getHistory();
+  h.unshift(entry);
+  localStorage.setItem(KEYS.history, JSON.stringify(h.slice(0, 50)));
+  renderHistoryList();
+  renderCreditHistList();
+}
+
+function refreshUI() {
+  const credits = getCredits();
+  const free = getFreeLeft();
+
+  const chip = document.getElementById('creditChipLabel');
+  if (chip) chip.textContent = free > 0 ? `${free} free` : `${credits} cr`;
+
+  const bal = document.getElementById('balanceLarge');
+  if (bal) bal.textContent = credits;
+
+  const banner = document.getElementById('freeBanner');
+  const freeEl = document.getElementById('freeLeft');
+  if (banner && freeEl) {
+    if (free > 0) { banner.style.display = 'block'; freeEl.textContent = free; }
+    else { banner.style.display = 'none'; }
+  }
+}
+
+function historyRowHTML(item) {
+  return `
+    <div class="h-item">
+      <div class="h-item-inner">
+        <img class="h-thumb" src="${item.img || ''}" onerror="this.style.background='var(--bg3)'" alt="">
+        <div class="h-body">
+          <div class="h-name">${item.name}</div>
+          <div class="h-meta">${item.date}</div>
+        </div>
+        <div class="h-right">
+          <div class="h-price">${item.range}</div>
+          <i class="ti ti-chevron-right h-arrow"></i>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderHistoryList() {
+  const el = document.getElementById('histList');
+  if (!el) return;
+  const h = getHistory();
+  if (!h.length) {
+    el.innerHTML = `<div class="h-empty"><i class="ti ti-camera-off"></i><div class="h-empty-title">No scans yet</div><div class="h-empty-sub">Snap something and see<br>what it's worth.</div></div>`;
+    return;
+  }
+  el.innerHTML = h.map(historyRowHTML).join('');
+}
+
+function renderCreditHistList() {
+  const el = document.getElementById('creditHistList');
+  if (!el) return;
+  const h = getHistory();
+  if (!h.length) {
+    el.innerHTML = `<div class="h-empty" style="padding:30px 0"><i class="ti ti-receipt-off" style="font-size:36px"></i><div class="h-empty-sub" style="margin-top:8px">No scans yet</div></div>`;
+    return;
+  }
+  el.innerHTML = h.map(historyRowHTML).join('');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.scr').forEach(s => s.classList.add('hidden'));
+  const scr = document.getElementById(id);
+  scr.classList.remove('hidden');
+  scr.style.animation = 'none';
+  scr.offsetHeight;
+  scr.style.animation = '';
+  refreshUI();
+  if (id === 'scrHistory') renderHistoryList();
+  if (id === 'scrCredits') renderCreditHistList();
+  if (id === 'scrSettings') initSettingsScreen();
+}
+
+function initSettingsScreen() {
+  updateCurrencyPicker();
+  renderCurrencyList(CURRENCIES);
+  const credits = getCredits();
+  const free = getFreeLeft();
+  const el = document.getElementById('settingsCreditsLabel');
+  if (el) el.textContent = free > 0 ? `${free} free scans remaining` : `${credits} credits`;
+  const toggle = document.getElementById('darkModeToggle');
+  const theme = document.documentElement.getAttribute('data-theme');
+  if (toggle) toggle.checked = theme === 'dark';
+}
+
+function switchTab(screenId, navId) {
+  showScreen(screenId);
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(navId).classList.add('active');
+}
+
+function closePaywall() { document.getElementById('paywallOverlay').classList.remove('show'); }
+function openPaywall() { document.getElementById('paywallOverlay').classList.add('show'); }
+
+document.addEventListener('DOMContentLoaded', refreshUI);
+
+</script>
+<script>
+function clearHistory() {
+  if (!confirm('Clear all scan history?')) return;
+  localStorage.removeItem('quicksell_history');
+  renderHistoryList();
+  renderCreditHistList();
+  const btn = document.getElementById('clearHistBtn');
+  if (btn) { btn.textContent = 'Cleared!'; setTimeout(() => btn.textContent = 'Clear all', 2000); }
+}
+
+
+// ── CURRENCY ──
+const CURRENCIES = [
+  { code: 'USD', symbol: '$',  name: 'US Dollar',         cc: 'us' },
+  { code: 'EUR', symbol: '€',  name: 'Euro',               cc: 'eu' },
+  { code: 'GBP', symbol: '£',  name: 'British Pound',      cc: 'gb' },
+  { code: 'CHF', symbol: 'Fr', name: 'Swiss Franc',        cc: 'ch' },
+  { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar',    cc: 'ca' },
+  { code: 'AUD', symbol: 'A$', name: 'Australian Dollar',  cc: 'au' },
+  { code: 'JPY', symbol: '¥',  name: 'Japanese Yen',       cc: 'jp' },
+  { code: 'SEK', symbol: 'kr', name: 'Swedish Krona',      cc: 'se' },
+  { code: 'NOK', symbol: 'kr', name: 'Norwegian Krone',    cc: 'no' },
+  { code: 'DKK', symbol: 'kr', name: 'Danish Krone',       cc: 'dk' },
+  { code: 'PLN', symbol: 'zł', name: 'Polish Złoty',       cc: 'pl' },
+  { code: 'CZK', symbol: 'Kč', name: 'Czech Koruna',       cc: 'cz' },
+  { code: 'HUF', symbol: 'Ft', name: 'Hungarian Forint',   cc: 'hu' },
+  { code: 'HRK', symbol: '€',  name: 'Croatian Euro',      cc: 'hr' },
+  { code: 'NZD', symbol: 'NZ$',name: 'New Zealand Dollar', cc: 'nz' },
+  { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar',   cc: 'sg' },
+  { code: 'MXN', symbol: '$',  name: 'Mexican Peso',       cc: 'mx' },
+  { code: 'BRL', symbol: 'R$', name: 'Brazilian Real',     cc: 'br' },
+  { code: 'INR', symbol: '₹',  name: 'Indian Rupee',       cc: 'in' },
+  { code: 'KRW', symbol: '₩',  name: 'Korean Won',         cc: 'kr' },
+];
+const RATES = { USD:1, EUR:0.92, GBP:0.79, CHF:0.90, CAD:1.36, AUD:1.53, JPY:149, SEK:10.5, NOK:10.6, DKK:6.88, PLN:3.97, CZK:22.9, HUF:355, HRK:0.92, NZD:1.63, SGD:1.34, MXN:17.1, BRL:4.97, INR:83.1, KRW:1325 };
+let userCurrency = localStorage.getItem('qs_currency') || 'USD';
+let currencyDropdownOpen = false;
+function getCurrencyData() { return CURRENCIES.find(c => c.code === userCurrency) || CURRENCIES[0]; }
+function getCurrencySymbol() { return getCurrencyData().symbol; }
+function convertPrice(usdPrice) { return Math.round(usdPrice * (RATES[userCurrency] || 1)); }
+function formatPrice(usdPrice) { return getCurrencySymbol() + convertPrice(usdPrice); }
+function flagImg(cc, size=24) {
+  return `<img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/${cc.toUpperCase()}.svg" width="${size}" height="${Math.round(size*0.67)}" style="border-radius:3px;object-fit:cover;flex-shrink:0;vertical-align:middle" onerror="this.style.display='none'" alt="${cc}">`;
+}
+function setCurrency(code) { userCurrency = code; localStorage.setItem('qs_currency', code); updateCurrencyPicker(); toggleCurrencyDropdown(false); }
+function updateCurrencyPicker() {
+  const c = getCurrencyData();
+  const flag = document.getElementById('pickerFlag'); const name = document.getElementById('pickerName'); const code = document.getElementById('pickerCode');
+  if (flag) flag.innerHTML = flagImg(c.cc, 28);
+  if (name) name.textContent = c.name;
+  if (code) code.textContent = `${c.code} · ${c.symbol}`;
+}
+function toggleCurrencyDropdown(forceClose) {
+  const dropdown = document.getElementById('currencyDropdown'); const arrow = document.getElementById('pickerArrow');
+  if (!dropdown) return;
+  if (forceClose === false || currencyDropdownOpen) { currencyDropdownOpen = false; dropdown.classList.remove('open'); if (arrow) arrow.classList.remove('open'); }
+  else { currencyDropdownOpen = true; dropdown.classList.add('open'); if (arrow) arrow.classList.add('open'); renderCurrencyList(CURRENCIES); setTimeout(() => document.getElementById('currencySearch')?.focus(), 100); }
+}
+function filterCurrencies(query) { renderCurrencyList(CURRENCIES.filter(c => c.name.toLowerCase().includes(query.toLowerCase()) || c.code.toLowerCase().includes(query.toLowerCase()))); }
+function renderCurrencyList(list) {
+  const el = document.getElementById('currencyList'); if (!el) return;
+  el.innerHTML = list.map(c => `<div class="currency-option ${c.code === userCurrency ? 'active' : ''}" onclick="setCurrency('${c.code}')">
+    ${flagImg(c.cc, 24)}<div class="currency-option-info"><div class="currency-option-name">${c.name}</div><div class="currency-option-code">${c.code} · ${c.symbol}</div></div>
+    <i class="ti ti-check currency-option-check"></i></div>`).join('');
+}
+function renderCurrencyGrid() { updateCurrencyPicker(); }
+
+// ── THEME ──
+function initTheme() {
+  const saved = localStorage.getItem('qs_theme') || 'dark';
+  setTheme(saved);
+}
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('qs_theme', t);
+  document.querySelectorAll('.theme-btn i').forEach(i => {
+    i.className = t === 'dark' ? 'ti ti-sun' : 'ti ti-moon';
+  });
+  const meta = document.querySelector('meta[name=theme-color]');
+  if (meta) meta.content = t === 'dark' ? '#0d0d0d' : '#f5f5f0';
+  const toggle = document.getElementById('darkModeToggle');
+  if (toggle) toggle.checked = t === 'dark';
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  setTheme(cur === 'dark' ? 'light' : 'dark');
+}
+
+// ── ONBOARDING ──
+function dismissOnboarding() {
+  try {
+    localStorage.setItem('qs_onboarded', '1');
+  } catch(e) {}
+  const ob = document.getElementById('onboarding');
+  if (ob) { ob.style.display = 'none'; ob.classList.add('hidden'); }
+}
+function initOnboarding() {
+  if (localStorage.getItem('qs_onboarded')) {
+    document.getElementById('onboarding').classList.add('hidden');
+  }
+}
+
+// ── MULTI PHOTO ──
+const MAX_PHOTOS = 3;
+let photos = [null, null, null];
+let activePhotoIdx = 0;
+
+function initPhotoGrid() {
+  updatePhotoViewer();
+}
+
+function updatePhotoViewer() {
+  const count = photos.filter(Boolean).length;
+  const main = document.getElementById('photoMain');
+  const mainImg = document.getElementById('photoMainImg');
+  const placeholder = document.getElementById('photoMainPlaceholder');
+  const thumbsEl = document.getElementById('photoThumbs');
+  const arrowL = document.getElementById('arrowLeft');
+  const arrowR = document.getElementById('arrowRight');
+  if (!main) return;
+
+  // Clamp
+  if (activePhotoIdx >= count && count > 0) activePhotoIdx = count - 1;
+  if (count === 0) activePhotoIdx = 0;
+
+  // Main image
+  if (count > 0 && photos[activePhotoIdx]) {
+    main.classList.add('filled');
+    mainImg.src = photos[activePhotoIdx].dataUrl;
+    mainImg.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    main.classList.remove('filled');
+    mainImg.style.display = 'none';
+    mainImg.src = '';
+    placeholder.style.display = 'flex';
+  }
+
+  // Arrows + delete — always visible when there is at least 1 photo
+  if (arrowL) arrowL.classList.toggle('visible', count > 0);
+  if (arrowR) arrowR.classList.toggle('visible', count > 0);
+  const delBtn = document.getElementById('photoDeleteMain');
+  if (delBtn) delBtn.classList.toggle('visible', count > 0);
+
+  // Thumbnails — always show all 3 slots
+  thumbsEl.innerHTML = '';
+  for (let i = 0; i < MAX_PHOTOS; i++) {
+    const p = photos[i];
+    if (p) {
+      // Filled thumb
+      const thumb = document.createElement('div');
+      thumb.className = 'photo-thumb' + (i === activePhotoIdx ? ' active' : '');
+      const img = document.createElement('img');
+      img.src = p.dataUrl; img.alt = '';
+      thumb.appendChild(img);
+      thumb.addEventListener('click', (e) => {
+        e.stopPropagation();
+        activePhotoIdx = i;
+        updatePhotoViewer();
+      });
+      thumbsEl.appendChild(thumb);
+    } else {
+      // Empty slot with + icon and file input
+      const thumb = document.createElement('div');
+      thumb.className = 'photo-thumb empty';
+      const icon = document.createElement('i');
+      icon.className = 'ti ti-plus';
+      thumb.appendChild(icon);
+      const inp = document.createElement('input');
+      inp.type = 'file'; inp.accept = 'image/*';
+      inp.style.cssText = 'position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;width:100%;height:100%';
+      inp.addEventListener('change', function() {
+        addPhotoToSlot(i, this);
+      });
+      thumb.style.position = 'relative';
+      thumb.appendChild(inp);
+      thumbsEl.appendChild(thumb);
+    }
+  }
+
+  updatePhotoCount();
+  document.getElementById('scanBtn').disabled = !photos[0];
+}
+
+function addPhotoToSlot(index, input) {
+  const file = input.files[0];
+  if (!file) return;
+  compressAndStore(file, index);
+}
+
+function mainPhotoClick() {
+  document.getElementById('mainFileInput').click();
+}
+
+function deleteMainPhoto() {
+  photos[activePhotoIdx] = null;
+  photos = photos.filter(Boolean);
+  while (photos.length < MAX_PHOTOS) photos.push(null);
+  if (activePhotoIdx >= photos.filter(Boolean).length) activePhotoIdx = Math.max(0, photos.filter(Boolean).length - 1);
+  updatePhotoViewer();
+}
+
+function slidePhoto(dir) {
+  const count = photos.filter(Boolean).length;
+  if (count === 0) return;
+  activePhotoIdx = (activePhotoIdx + dir + count) % count;
+  updatePhotoViewer();
+}
+
+function addPhotoFromInput(input) {
+  const file = input.files[0];
+  if (!file) return;
+  // Find next empty slot, or replace current active
+  let targetIdx = photos.findIndex(p => !p);
+  if (targetIdx === -1) targetIdx = activePhotoIdx; // replace if full
+  compressAndStore(file, targetIdx);
+  input.value = '';
+}
+
+function compressAndStore(file, index) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      // Max 1920px on longest side, quality 0.92 — full quality for Cloudflare Worker
+      const MAX = 1920;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const full = canvas.toDataURL('image/jpeg', 0.92);
+      photos[index] = { base64: full.split(',')[1], dataUrl: full };
+      activePhotoIdx = index;
+      updatePhotoViewer();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function addPhoto(index, input) {
+  const file = input.files[0];
+  if (!file) return;
+  compressAndStore(file, index);
+}
+
+function removePhoto(index, e) {
+  if (e) e.stopPropagation();
+  photos[index] = null;
+  photos = photos.filter(Boolean);
+  while (photos.length < MAX_PHOTOS) photos.push(null);
+  if (activePhotoIdx >= photos.filter(Boolean).length) activePhotoIdx = Math.max(0, photos.filter(Boolean).length - 1);
+  updatePhotoViewer();
+  document.getElementById('scanBtn').disabled = !photos[0];
+}
+
+function updatePhotoCount() {
+  const count = photos.filter(Boolean).length;
+  const el = document.getElementById('photoCount');
+  if (!el) return;
+  if (count === 0) { el.innerHTML = ''; return; }
+  const warn = count > 1 ? ' · <span style="color:var(--lime)">same item only</span>' : '';
+  el.innerHTML = `<strong>${count}</strong> of ${MAX_PHOTOS} photos — more angles = better estimate${warn}`;
+}
+
+// ── PLATFORMS BY REGION ──
+const PLATFORM_REGIONS = {
+  'SI': { primary: ['Bolha.com', 'Facebook Marketplace'], secondary: ['Mimovrste', 'eBay'] },
+  'HR': { primary: ['Njuškalo', 'Facebook Marketplace'], secondary: ['OLX', 'eBay'] },
+  'RS': { primary: ['KupujemProdajem', 'Facebook Marketplace'], secondary: ['OLX', 'eBay'] },
+  'DE': { primary: ['eBay Kleinanzeigen', 'Facebook Marketplace'], secondary: ['eBay', 'Vinted'] },
+  'GB': { primary: ['eBay', 'Facebook Marketplace'], secondary: ['Gumtree', 'Depop'] },
+  'US': { primary: ['eBay', 'Facebook Marketplace'], secondary: ['Craigslist', 'Depop'] },
+  'default': { primary: ['eBay', 'Facebook Marketplace'], secondary: ['Craigslist', 'Depop'] }
+};
+
+let userRegion = localStorage.getItem('qs_region') || 'default';
+
+async function detectRegion() {
+  if (localStorage.getItem('qs_region')) return;
+  try {
+    const r = await fetch('https://ipapi.co/country/');
+    const country = await r.text();
+    userRegion = PLATFORM_REGIONS[country] ? country : 'default';
+    localStorage.setItem('qs_region', userRegion);
+  } catch { userRegion = 'default'; }
+}
+
+function getPlatforms() {
+  return PLATFORM_REGIONS[userRegion] || PLATFORM_REGIONS['default'];
+}
+
+// ── LOADING ──
+const STEPS = [
+  { icon: 'ti-search',       text: 'Identifying item' },
+  { icon: 'ti-shield-check', text: 'Assessing condition' },
+  { icon: 'ti-chart-line',   text: 'Searching sold listings' },
+  { icon: 'ti-file-text',    text: 'Building your report' },
+];
+
+function showLoadingScreen() {
+  document.getElementById('mainNav').style.display = 'none';
+  document.querySelectorAll('.scr').forEach(s => s.classList.add('hidden'));
+  document.getElementById('scrLoading').classList.remove('hidden');
+  renderSteps(-1); setProgress(0);
+}
+function hideLoadingScreen() {
+  document.getElementById('scrLoading').classList.add('hidden');
+  document.getElementById('mainNav').style.display = '';
+}
+function renderSteps(activeIndex) {
+  document.getElementById('stepList').innerHTML = STEPS.map((s, i) => {
+    const isDone = i < activeIndex, isActive = i === activeIndex;
+    return `<div class="step">
+      <div class="step-dot ${isDone?'done':isActive?'active':''}"></div>
+      <div class="step-text ${isDone?'done':isActive?'active':''}">${s.text}</div>
+      <i class="ti ti-check step-check ${isDone?'show':''}"></i>
+    </div>`;
+  }).join('');
+}
+function setProgress(pct) {
+  const ring = document.getElementById('progressRing');
+  const lbl  = document.getElementById('progressPct');
+  const c = Math.min(pct, 1);
+  if (ring) ring.style.strokeDashoffset = 408 - 408 * c;
+  if (lbl)  lbl.textContent = Math.round(c * 100) + '%';
+}
+function runLoadingAnimation() {
+  return new Promise(resolve => {
+    let step = 0; renderSteps(0); setProgress(0.1);
+    const iv = setInterval(() => {
+      step++;
+      if (step >= STEPS.length) { clearInterval(iv); setProgress(0.95); renderSteps(STEPS.length); resolve(); return; }
+      renderSteps(step); setProgress((step + 1) / STEPS.length * 0.95);
+    }, 650);
+  });
+}
+
+// ── MOCK DATA ──
+const MOCK = {
+  item_name: "Nike Air Max 90 Sneakers",
+  condition: "Good",
+  condition_note: "Minor creasing on the toe box, soles show light wear, no major scuffs or damage.",
+  price_low: 55, price_high: 90, sweet_spot: 70,
+  reasoning: "Air Max 90s in Good condition sell between $55–$90 on eBay depending on colorway and size. This neutral colorway has steady year-round demand. Facebook Marketplace moves them faster locally at a slight discount.",
+  listing_description: "Nike Air Max 90s in good used condition — still plenty of life left in them. Minor creasing on the toe, soles are solid. Great everyday sneaker, selling because I upgraded. Pick up or shipping available.",
+  price_trend: [52, 58, 55, 63, 70, 68, 75],
+  price_history_months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Now"],
+  comparable_listings: [
+    { title: "Nike Air Max 90 White/Grey", platform: "eBay", price: 68, sold: true, days_ago: 2 },
+    { title: "Nike Air Max 90 Size 10", platform: "Facebook", price: 60, sold: true, days_ago: 4 },
+    { title: "Nike Air Max 90 Neutral", platform: "eBay", price: 75, sold: true, days_ago: 7 },
+  ],
+  sell_faster_tips: [
+    { title: "Photo angles matter", tip: "Include 6+ photos — both sides, sole, toe box and heel. Listings with more photos sell 2x faster." },
+    { title: "List on Sunday evening", tip: "eBay bidding peaks Sunday 7–9pm. Listings ending then consistently get higher final prices." },
+    { title: "Keywords in title", tip: "Add size, colorway and condition to your title: \"Nike Air Max 90 Size 10 White Good Condition\"." },
+  ]
+};
+
+// ── API CONFIG ── 
+// Replace with your Cloudflare Worker URL after deploy
+const QUICKSELL_API_URL = 'https://quicksell-api.flythecoolmc.workers.dev';
+
+// ── ANALYZE ──
+async function analyzeImage() {
+  if (!photos[0]) return;
+  document.getElementById('scanBtn').disabled = true;
+  showLoadingScreen();
+
+  const plats = getPlatforms();
+  const platformList = [...plats.primary, ...plats.secondary].join(', ');
+
+  const prompt = `You are an expert resale pricer with deep knowledge of sold listings on eBay, Facebook Marketplace, and local resale platforms.
+
+Analyze this image and return a realistic secondhand price estimate.
+
+Respond ONLY with valid JSON — no markdown, no code fences:
+{
+  "item_name": "specific descriptive item name",
+  "condition": "Good",
+  "condition_note": "one sentence describing visible wear or condition",
+  "price_low": 18,
+  "price_high": 42,
+  "sweet_spot": 28,
+  "reasoning": "2-3 sentences explaining the price range based on what you see",
+  "listing_description": "ready-to-post 2-3 sentence marketplace listing, casual honest tone",
+  "price_trend": [8, 10, 9, 11, 12, 11, 13],
+  "price_history_months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Now"],
+  "comparable_listings": [
+    { "title": "similar item title", "platform": "eBay", "price": 65, "sold": true, "days_ago": 3 },
+    { "title": "similar item title", "platform": "Facebook Marketplace", "price": 58, "sold": true, "days_ago": 6 },
+    { "title": "similar item title", "platform": "eBay", "price": 72, "sold": true, "days_ago": 9 }
+  ],
+  "sell_faster_tips": [
+    { "title": "Tip title", "tip": "Specific actionable tip for this exact item." },
+    { "title": "Tip title", "tip": "Specific actionable tip for this exact item." },
+    { "title": "Tip title", "tip": "Specific actionable tip for this exact item." }
+  ]
+}
+
+Rules:
+- condition must be exactly: Excellent / Good / Fair / Poor
+- price_trend: 7 numbers showing relative demand over 7 months (scale to match sweet_spot)
+- price_history_months: 7 labels, last one always "Now"
+- If item is antique/vintage (>20 years old), adjust months to years e.g. ["2018","2019","2020","2021","2022","2023","Now"]
+- If you cannot determine price history, return price_trend as empty array []
+- comparable_listings: 3 realistic recently sold similar items
+- Preferred platforms for this user: ${platformList}
+- Base all prices on realistic US/EU market sold listings`;
+
+  // Build messages — include all uploaded photos
+  const imageContents = photos.filter(Boolean).map(p => ({
+    type: 'image',
+    source: { type: 'base64', media_type: 'image/jpeg', data: p.base64 }
+  }));
+  imageContents.push({ type: 'text', text: prompt });
+
+  try {
+    const [response] = await Promise.all([
+      fetch(QUICKSELL_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          max_tokens: 1500,
+          messages: [{ role: 'user', content: imageContents }]
+        })
+      }),
+      runLoadingAnimation()
+    ]);
+
+    if (!response.ok) throw new Error(`Server error ${response.status}`);
+    const data = await response.json();
+    if (data.error) throw new Error(data.error);
+
+    const raw = data.content[0].text.trim().replace(/```json|```/g, '').trim();
+    const result = JSON.parse(raw);
+
+    // Inject local platforms
+    result.best_platforms = plats.primary;
+    result.other_platforms = plats.secondary;
+
+    consumeScan();
+    addHistory({
+      name: result.item_name,
+      range: `${formatPrice(result.price_low)}–${formatPrice(result.price_high)}`,
+      img: photos[0].dataUrl,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    });
+
+    setProgress(1);
+    await new Promise(r => setTimeout(r, 300));
+    hideLoadingScreen();
+    showResultScreen(result);
+
+  } catch (err) {
+    console.error('QuickSell error:', err);
+    hideLoadingScreen();
+    document.querySelectorAll('.scr').forEach(s => s.classList.add('hidden'));
+    document.getElementById('scrScan').classList.remove('hidden');
+    document.getElementById('scanBtn').disabled = false;
+    showToast(err.message || "Couldn't analyze. Try again.", 'error');
+  }
+}
+
+// ── CONDITION GRADIENT ──
+const COND_MAP = { 'Excellent': 6.25, 'Good': 31.25, 'Fair': 62.5, 'Poor': 93.75 };
+const COND_CLASS = { 'Excellent': 'cond-excellent', 'Good': 'cond-good', 'Fair': 'cond-fair', 'Poor': 'cond-poor' };
+
+function renderCondition(condition, note) {
+  const pct = COND_MAP[condition] || 50;
+  const cls = COND_CLASS[condition] || 'cond-good';
+  return `
+    <span class="cond-badge ${cls}"><i class="ti ti-circle-filled" style="font-size:8px"></i> ${condition}</span>
+    <div class="cond-gradient-bar">
+      <div class="cond-marker" style="left:${pct}%"></div>
+    </div>
+    <div class="cond-labels">
+      <span>Excellent</span><span>Good</span><span>Fair</span><span>Poor</span>
+    </div>
+    <div class="wear-desc"><strong>${condition}:</strong> ${note || ''}</div>`;
+}
+
+// ── COMPARABLE LISTINGS ──
+function renderComparables(items) {
+  if (!items || !items.length) return '';
+  return `<div class="comp-list">${items.map(item => `
+    <div class="comp-item">
+      <div class="comp-left">
+        <div class="comp-title">${item.title}</div>
+        <div class="comp-meta">${item.platform} · ${item.days_ago}d ago</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div class="comp-price">${formatPrice(item.price)}</div>
+        ${item.sold ? '<span class="comp-sold-badge">SOLD</span>' : ''}
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+// ── SELL FASTER TIPS ──
+function renderTips(tips) {
+  if (!tips || !tips.length) return '';
+  return `<div class="tips-list">${tips.map((t, i) => `
+    <div class="tip-item">
+      <div class="tip-num">${i+1}</div>
+      <div class="tip-text"><strong>${t.title}:</strong> ${t.tip}</div>
+    </div>`).join('')}</div>`;
+}
+
+// ── CHART ──
+function renderChart(trend, months) {
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  const lineColor = isDark ? '#d4ff3c' : '#1a6600';
+  const fillColor = isDark ? 'rgba(212,255,60,0.18)' : 'rgba(26,102,0,0.12)';
+  if (!trend || trend.length < 2) {
+    return `<div class="chart-wrap"><div class="chart-no-data">Not enough historical data available for this item.</div></div>`;
+  }
+  const n = trend.length;
+  const xLabels = months && months.length === n ? months : trend.map((_, i) => { const ago = n-1-i; return ago===0?'Now':`${ago}mo`; });
+  const W=300, H=90, PL=4, PR=4, PT=6, PB=4;
+  const max=Math.max(...trend), min=Math.min(...trend), range=max-min||1;
+  const pts = trend.map((v,i) => [PL+(i/(n-1))*(W-PL-PR), PT+(1-(v-min)/range)*(H-PT-PB)]);
+  const poly = pts.map(([x,y])=>`${x},${y}`).join(' ');
+  const fill = `M${pts[0][0]},${H} `+pts.map(([x,y])=>`L${x},${y}`).join(' ')+` L${pts[n-1][0]},${H} Z`;
+  const [lx,ly]=pts[n-1];
+  const xShow=[0,Math.floor((n-1)/2),n-1];
+  return `<div class="chart-wrap"><div class="chart-inner">
+    <div class="chart-y"><span>$${Math.round(max)}</span><span>$${Math.round((max+min)/2)}</span><span>$${Math.round(min)}</span></div>
+    <div class="chart-right">
+      <svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}" preserveAspectRatio="none">
+        <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${lineColor}" stop-opacity="${isDark?0.2:0.15}"/>
+          <stop offset="100%" stop-color="${lineColor}" stop-opacity="0"/>
+        </linearGradient></defs>
+        <line x1="${PL}" y1="${PT}" x2="${W-PR}" y2="${PT}" stroke="#232323" stroke-width="0.7"/>
+        <line x1="${PL}" y1="${PT+(H-PT-PB)/2}" x2="${W-PR}" y2="${PT+(H-PT-PB)/2}" stroke="#1e1e1e" stroke-width="0.7"/>
+        <line x1="${PL}" y1="${H-PB}" x2="${W-PR}" y2="${H-PB}" stroke="#232323" stroke-width="0.7"/>
+        <path d="${fill}" fill="url(#cg)"/>
+        <polyline points="${poly}" fill="none" stroke="${lineColor}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="${lx}" cy="${ly}" r="4.5" fill="${lineColor}"/>
+        <circle cx="${lx}" cy="${ly}" r="8" fill="none" stroke="${lineColor}" stroke-opacity="0.3" stroke-width="1.5"/>
+      </svg>
+      <div class="chart-x">${xShow.map(i=>`<span>${xLabels[i]}</span>`).join('')}</div>
+    </div>
+  </div></div>`;
+}
+
+// ── RESULT SCREEN ──
+let currentResult = null;
+function showResultScreen(r) {
+  currentResult = r;
+  document.querySelectorAll('.scr').forEach(s => s.classList.add('hidden'));
+  document.getElementById('scrResult').classList.remove('hidden');
+  const c2 = document.getElementById('creditChipLabel2');
+  const c1 = document.getElementById('creditChipLabel');
+  if (c2 && c1) c2.textContent = c1.textContent;
+
+  const best  = (r.best_platforms||[]).map(p=>`<div class="plat-chip plat-primary"><i class="ti ti-circle-check"></i>${p}</div>`).join('');
+  const other = (r.other_platforms||[]).map(p=>`<div class="plat-chip plat-secondary">${p}</div>`).join('');
+  const heroImg = photos[0]?.dataUrl || '';
+
+  document.getElementById('resultArea').innerHTML = `
+    <div class="result-card">
+      <div class="r-hero">
+        <img class="r-hero-img" src="${heroImg}" alt="${r.item_name}">
+        <div class="r-hero-overlay"></div>
+        <button class="r-hero-share" onclick="shareReport()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        <div class="r-hero-content">
+          <div class="r-hero-eyebrow">Identified item</div>
+          <div class="r-hero-name">${r.item_name}</div>
+          <div class="r-hero-price-row">
+            <div class="r-hero-price">${formatPrice(r.price_low)}<span class="r-hero-price-sep">–</span>${formatPrice(r.price_high)}</div>
+            <div class="r-hero-list">
+              <div class="r-hero-list-label">List at</div>
+              <div class="r-hero-list-val">${formatPrice(r.sweet_spot)}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="r-card">
+        <div class="r-card-label">Condition</div>
+        ${renderCondition(r.condition, r.condition_note)}
+      </div>
+
+      <div class="r-card">
+        <div class="r-card-label">Why this price</div>
+        <div class="r-why-text">${r.reasoning}</div>
+      </div>
+
+      <div class="r-card">
+        <div class="r-card-label">Comparable sold listings</div>
+        ${renderComparables(r.comparable_listings)}
+      </div>
+
+      <div class="r-card">
+        <div class="r-card-label">Best platforms</div>
+        <div class="plat-chips">${best}${other}</div>
+      </div>
+
+      <div class="r-card">
+        <div class="r-card-label">Sell faster tips</div>
+        ${renderTips(r.sell_faster_tips)}
+      </div>
+
+      <div class="r-card">
+        <div class="r-card-label">Price history</div>
+        ${renderChart(r.price_trend, r.price_history_months)}
+      </div>
+
+      <div class="r-card">
+        <div class="r-card-label">Ready-to-post description</div>
+        <div class="desc-box" id="descBox">${r.listing_description}</div>
+        <div class="desc-actions">
+          <button class="regen-btn" id="regenBtn" onclick="regenerateDescription()">
+            <i class="ti ti-refresh"></i> Regenerate
+          </button>
+          <button class="copy-btn" onclick="copyDescription()">
+            <i class="ti ti-copy"></i> Copy
+          </button>
+        </div>
+      </div>
+    </div>
+    <button class="rescan-btn" onclick="resetScan()">
+      <i class="ti ti-refresh"></i> Price another item
+    </button>`;
+}
+
+// ── SHARE ──
+async function shareReport() {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: `${currentResult.item_name} — $${currentResult.price_low}–$${currentResult.price_high}`,
+        text: `Just priced my ${currentResult.item_name} on QuickSell — worth $${currentResult.sweet_spot}. ${currentResult.listing_description}`,
+      });
+    } catch {}
+  } else {
+    navigator.clipboard.writeText(`${currentResult.item_name}: $${currentResult.price_low}–$${currentResult.price_high}\n\n${currentResult.listing_description}`)
+      .then(() => showToast('Report copied to clipboard', 'success'));
+  }
+}
+
+// ── REGEN ──
+async function regenerateDescription() {
+  const btn = document.getElementById('regenBtn');
+  const box = document.getElementById('descBox');
+  btn.classList.add('regenerating');
+  btn.innerHTML = '<div class="spinner-sm"></div> Regenerating';
+
+  try {
+    const response = await fetch(QUICKSELL_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        max_tokens: 300,
+        messages: [{
+          role: 'user',
+          content: `Write a fresh marketplace listing description for: "${currentResult.item_name}", condition: ${currentResult.condition}, listing price ~$${currentResult.sweet_spot}.
+
+Write 2-3 sentences. Casual, honest tone. Different angle and wording from this previous version: "${currentResult.listing_description}"
+
+Respond with ONLY the description text. No quotes, no preamble.`
+        }]
+      })
+    });
+    if (!response.ok) throw new Error('error');
+    const data = await response.json();
+    const newDesc = data.content[0].text.trim();
+    currentResult.listing_description = newDesc;
+    box.textContent = newDesc;
+  } catch {
+    showToast("Couldn't regenerate, try again", 'error');
+  } finally {
+    btn.classList.remove('regenerating');
+    btn.innerHTML = '<i class="ti ti-refresh"></i> Regenerate';
+  }
+}
+
+function copyDescription() {
+  navigator.clipboard.writeText(document.getElementById('descBox').textContent)
+    .then(() => showToast('Copied!', 'success'))
+    .catch(() => showToast("Couldn't copy", 'error'));
+}
+
+// ── RESET ──
+function resetScan() {
+  photos = [null, null, null];
+  activePhotoIdx = 0;
+  currentResult = null;
+  updatePhotoViewer();
+  document.getElementById('scanBtn').disabled = true;
+  document.getElementById('resultArea').innerHTML = '';
+  document.querySelectorAll('.scr').forEach(s => s.classList.add('hidden'));
+  document.getElementById('scrScan').classList.remove('hidden');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('navScan').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── TOAST ──
+function showToast(msg, type = 'error') {
+  const t = document.getElementById('toast');
+  t.className = `toast ${type === 'success' ? 'success' : ''}`;
+  t.innerHTML = type === 'error' ? `<i class="ti ti-alert-circle"></i>${msg}` : msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initOnboarding();
+  updatePhotoViewer();
+  detectRegion();
+});
+
+</script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));

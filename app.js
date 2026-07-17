@@ -1,3 +1,69 @@
+function clearHistory() {
+  if (!confirm('Clear all scan history?')) return;
+  localStorage.removeItem('quicksell_history');
+  renderHistoryList();
+  renderCreditHistList();
+  const btn = document.getElementById('clearHistBtn');
+  if (btn) { btn.textContent = 'Cleared!'; setTimeout(() => btn.textContent = 'Clear all', 2000); }
+}
+
+
+// ── CURRENCY ──
+const CURRENCIES = [
+  { code: 'USD', symbol: '$',  name: 'US Dollar',         cc: 'us' },
+  { code: 'EUR', symbol: '€',  name: 'Euro',               cc: 'eu' },
+  { code: 'GBP', symbol: '£',  name: 'British Pound',      cc: 'gb' },
+  { code: 'CHF', symbol: 'Fr', name: 'Swiss Franc',        cc: 'ch' },
+  { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar',    cc: 'ca' },
+  { code: 'AUD', symbol: 'A$', name: 'Australian Dollar',  cc: 'au' },
+  { code: 'JPY', symbol: '¥',  name: 'Japanese Yen',       cc: 'jp' },
+  { code: 'SEK', symbol: 'kr', name: 'Swedish Krona',      cc: 'se' },
+  { code: 'NOK', symbol: 'kr', name: 'Norwegian Krone',    cc: 'no' },
+  { code: 'DKK', symbol: 'kr', name: 'Danish Krone',       cc: 'dk' },
+  { code: 'PLN', symbol: 'zł', name: 'Polish Złoty',       cc: 'pl' },
+  { code: 'CZK', symbol: 'Kč', name: 'Czech Koruna',       cc: 'cz' },
+  { code: 'HUF', symbol: 'Ft', name: 'Hungarian Forint',   cc: 'hu' },
+  { code: 'HRK', symbol: '€',  name: 'Croatian Euro',      cc: 'hr' },
+  { code: 'NZD', symbol: 'NZ$',name: 'New Zealand Dollar', cc: 'nz' },
+  { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar',   cc: 'sg' },
+  { code: 'MXN', symbol: '$',  name: 'Mexican Peso',       cc: 'mx' },
+  { code: 'BRL', symbol: 'R$', name: 'Brazilian Real',     cc: 'br' },
+  { code: 'INR', symbol: '₹',  name: 'Indian Rupee',       cc: 'in' },
+  { code: 'KRW', symbol: '₩',  name: 'Korean Won',         cc: 'kr' },
+];
+const RATES = { USD:1, EUR:0.92, GBP:0.79, CHF:0.90, CAD:1.36, AUD:1.53, JPY:149, SEK:10.5, NOK:10.6, DKK:6.88, PLN:3.97, CZK:22.9, HUF:355, HRK:0.92, NZD:1.63, SGD:1.34, MXN:17.1, BRL:4.97, INR:83.1, KRW:1325 };
+let userCurrency = localStorage.getItem('qs_currency') || 'USD';
+let currencyDropdownOpen = false;
+function getCurrencyData() { return CURRENCIES.find(c => c.code === userCurrency) || CURRENCIES[0]; }
+function getCurrencySymbol() { return getCurrencyData().symbol; }
+function convertPrice(usdPrice) { return Math.round(usdPrice * (RATES[userCurrency] || 1)); }
+function formatPrice(usdPrice) { return getCurrencySymbol() + convertPrice(usdPrice); }
+function flagImg(cc, size=24) {
+  return `<img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/${cc.toUpperCase()}.svg" width="${size}" height="${Math.round(size*0.67)}" style="border-radius:3px;object-fit:cover;flex-shrink:0;vertical-align:middle" onerror="this.style.display='none'" alt="${cc}">`;
+}
+function setCurrency(code) { userCurrency = code; localStorage.setItem('qs_currency', code); updateCurrencyPicker(); toggleCurrencyDropdown(false); }
+function updateCurrencyPicker() {
+  const c = getCurrencyData();
+  const flag = document.getElementById('pickerFlag'); const name = document.getElementById('pickerName'); const code = document.getElementById('pickerCode');
+  if (flag) flag.innerHTML = flagImg(c.cc, 28);
+  if (name) name.textContent = c.name;
+  if (code) code.textContent = `${c.code} · ${c.symbol}`;
+}
+function toggleCurrencyDropdown(forceClose) {
+  const dropdown = document.getElementById('currencyDropdown'); const arrow = document.getElementById('pickerArrow');
+  if (!dropdown) return;
+  if (forceClose === false || currencyDropdownOpen) { currencyDropdownOpen = false; dropdown.classList.remove('open'); if (arrow) arrow.classList.remove('open'); }
+  else { currencyDropdownOpen = true; dropdown.classList.add('open'); if (arrow) arrow.classList.add('open'); renderCurrencyList(CURRENCIES); setTimeout(() => document.getElementById('currencySearch')?.focus(), 100); }
+}
+function filterCurrencies(query) { renderCurrencyList(CURRENCIES.filter(c => c.name.toLowerCase().includes(query.toLowerCase()) || c.code.toLowerCase().includes(query.toLowerCase()))); }
+function renderCurrencyList(list) {
+  const el = document.getElementById('currencyList'); if (!el) return;
+  el.innerHTML = list.map(c => `<div class="currency-option ${c.code === userCurrency ? 'active' : ''}" onclick="setCurrency('${c.code}')">
+    ${flagImg(c.cc, 24)}<div class="currency-option-info"><div class="currency-option-name">${c.name}</div><div class="currency-option-code">${c.code} · ${c.symbol}</div></div>
+    <i class="ti ti-check currency-option-check"></i></div>`).join('');
+}
+function renderCurrencyGrid() { updateCurrencyPicker(); }
+
 // ── THEME ──
 function initTheme() {
   const saved = localStorage.getItem('qs_theme') || 'dark';
@@ -18,8 +84,11 @@ function toggleTheme() {
 
 // ── ONBOARDING ──
 function dismissOnboarding() {
-  localStorage.setItem('qs_onboarded', '1');
-  document.getElementById('onboarding').classList.add('hidden');
+  try {
+    localStorage.setItem('qs_onboarded', '1');
+  } catch(e) {}
+  const ob = document.getElementById('onboarding');
+  if (ob) { ob.style.display = 'none'; ob.classList.add('hidden'); }
 }
 function initOnboarding() {
   if (localStorage.getItem('qs_onboarded')) {
@@ -31,25 +100,47 @@ function initOnboarding() {
 const MAX_PHOTOS = 3;
 let photos = [null, null, null]; // {base64, dataUrl}
 
+
 function initPhotoGrid() {
   const grid = document.getElementById('photoGrid');
+  if (!grid) return;
   grid.innerHTML = '';
   photos.forEach((p, i) => {
     const slot = document.createElement('div');
     slot.className = 'photo-slot' + (p ? ' filled' : '');
-    slot.id = `slot-${i}`;
     if (p) {
-      slot.innerHTML = `
-        <img src="${p.dataUrl}" alt="Photo ${i+1}">
-        <button class="photo-remove" onclick="removePhoto(${i}, event)">&#x2715;</button>`;
+      const img = document.createElement('img');
+      img.src = p.dataUrl; img.alt = 'Photo ' + (i+1);
+      slot.appendChild(img);
+      const rem = document.createElement('button');
+      rem.className = 'photo-remove'; rem.textContent = '×';
+      rem.addEventListener('click', (e) => removePhoto(i, e));
+      slot.appendChild(rem);
     } else {
-      const isMain = i === 0;
-      slot.innerHTML = `
-        <input type="file" accept="image/*" capture="environment" onchange="addPhoto(${i}, this)">
-        <div class="photo-slot-icon ${isMain ? '' : 'small'}">
-          <i class="ti ti-camera-plus"></i>
-          <span>${isMain ? 'Main photo' : 'Add photo'}</span>
-        </div>`;
+      const inp = document.createElement('input');
+      inp.type = 'file'; inp.accept = 'image/*';
+      if (i === 0) inp.setAttribute('capture', 'environment');
+      inp.addEventListener('change', function() { addPhoto(i, this); });
+      slot.appendChild(inp);
+      if (i === 0) {
+        const icon = document.createElement('div');
+        icon.className = 'photo-slot-icon';
+        icon.innerHTML = '<div class="upload-icons-row">' +
+          '<div class="upload-icon-btn"><i class="ti ti-camera"></i><span>Camera</span></div>' +
+          '<div class="upload-divider"></div>' +
+          '<div class="upload-icon-btn"><i class="ti ti-photo"></i><span>Upload</span></div>' +
+          '</div>' +
+          '<div class="upload-main-label">Take or upload a photo</div>' +
+          '<div class="upload-main-sub">Any item, any condition</div>';
+        slot.appendChild(icon);
+      } else {
+        const icon = document.createElement('div');
+        icon.className = 'photo-slot-icon small';
+        const ci = document.createElement('i'); ci.className = 'ti ti-plus';
+        const sp = document.createElement('span'); sp.textContent = 'Add photo';
+        icon.appendChild(ci); icon.appendChild(sp);
+        slot.appendChild(icon);
+      }
     }
     grid.appendChild(slot);
   });
@@ -61,17 +152,38 @@ function addPhoto(index, input) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
-    photos[index] = { base64: ev.target.result.split(',')[1], dataUrl: ev.target.result };
-    initPhotoGrid();
-    document.getElementById('scanBtn').disabled = !photos[0];
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 1920;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const MAX_BYTES = 3 * 1024 * 1024;
+      let lo = 0.1, hi = 1.0, best = '';
+      for (let i = 0; i < 8; i++) {
+        const mid = (lo + hi) / 2;
+        const candidate = canvas.toDataURL('image/jpeg', mid);
+        if (Math.round(candidate.length * 0.75) <= MAX_BYTES) { best = candidate; lo = mid; }
+        else { hi = mid; }
+      }
+      if (!best) best = canvas.toDataURL('image/jpeg', 0.1);
+      photos[index] = { base64: best.split(',')[1], dataUrl: best };
+      initPhotoGrid();
+      document.getElementById('scanBtn').disabled = !photos[0];
+    };
+    img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
 }
 
 function removePhoto(index, e) {
-  e.stopPropagation();
+  if (e) e.stopPropagation();
   photos[index] = null;
-  // Shift photos left
   photos = photos.filter(Boolean);
   while (photos.length < MAX_PHOTOS) photos.push(null);
   initPhotoGrid();
@@ -81,9 +193,10 @@ function removePhoto(index, e) {
 function updatePhotoCount() {
   const count = photos.filter(Boolean).length;
   const el = document.getElementById('photoCount');
+  if (!el) return;
   if (count === 0) { el.innerHTML = ''; return; }
   const warn = count > 1 ? ' · <span style="color:var(--lime)">same item only</span>' : '';
-  el.innerHTML = `<strong>${count}</strong> of ${MAX_PHOTOS} photos added — more angles = better estimate${warn}`;
+  el.innerHTML = `<strong>${count}</strong> of ${MAX_PHOTOS} photos — more angles = better estimate${warn}`;
 }
 
 // ── PLATFORMS BY REGION ──
