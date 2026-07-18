@@ -146,9 +146,9 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .result-card{display:flex;flex-direction:column;gap:0;animation:resultIn .4s cubic-bezier(.34,1.3,.64,1) both;margin-top:4px}
 
 /* Hero */
-.r-hero{border-radius:20px;overflow:hidden;position:relative;background:var(--bg2)}
+.r-hero{border-radius:20px;overflow:hidden;position:relative;background:var(--bg2);min-height:320px}
 .r-hero-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
-.r-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.25) 55%,transparent 100%)}
+.r-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.15) 75%,transparent 100%)}
 .r-hero-content{position:absolute;bottom:0;left:0;right:0;padding:18px 18px 20px}
 .r-hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:5px}
 .r-hero-name{font-size:19px;font-weight:800;letter-spacing:-.4px;color:#fff;line-height:1.2;margin-bottom:14px}
@@ -409,6 +409,17 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .streak-pill i{font-size:14px;color:#f97316}
 .streak-pill span{font-size:13px;font-weight:800;color:var(--text)}
 
+
+/* ── HERO SLIDESHOW ── */
+.r-hero-slides{position:absolute;inset:0;z-index:0;width:100%;height:100%}
+.r-hero-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;width:100%;height:100%}
+.r-hero-slide.active{opacity:1}
+.r-hero-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.r-hero-dots{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5}
+.r-hero-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.4);transition:all .3s}
+.r-hero-dot.active{background:#fff;width:14px;border-radius:3px}
+.rarity-badge-hero{position:absolute;top:14px;left:14px;z-index:5;display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;backdrop-filter:blur(8px)}
+
 /* ── TOAST ── */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-10px);background:#ff4444;color:#fff;font-size:13px;font-weight:700;padding:11px 20px;border-radius:100px;white-space:nowrap;opacity:0;pointer-events:none;transition:all .25s;z-index:200;display:flex;align-items:center;gap:7px;max-width:90vw}
 .toast i{font-size:15px}
@@ -456,7 +467,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
         </div>
         <div class="brand-actions">
           <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="position:relative;z-index:1"><path d="M0 0L18 18V0H0Z" fill="white"/><path d="M18 18L0 0V18H18Z" fill="#111"/></svg></button>
-          <div class="credits-chip" onclick="showScreen('scrCredits')" id="creditsChip">
+          <div class="credits-chip" onclick="showScreen('scrCredits')" id="creditsChip" title="Your scans">
             <i class="ti ti-bolt"></i>
             <span id="creditChipLabel">—</span>
           </div>
@@ -521,6 +532,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
   <!-- ── RESULT ── -->
   <div class="scr hidden" id="scrResult">
     <div class="brand-row" style="margin-bottom:14px">
+      <button onclick="resetScan()" style="background:none;border:none;display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--lime);cursor:pointer;padding:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> Back</button>
       <div class="brand" id="resultBrand" onclick="resetScan()" style="cursor:pointer" title="Back to home">
         <div class="brand-mark"><svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 1L2 10.5H8L6.5 17L14 7.5H8L9.5 1Z" fill="#d4ff3c" stroke="#d4ff3c" stroke-width="0.5" stroke-linejoin="round"/></svg></div>
         <div class="brand-name">QuickSell</div>
@@ -549,33 +561,33 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
   <div class="scr hidden" id="scrCredits">
     <div class="screen-hd">
       <div class="back-link" onclick="showScreen('scrScan')"><i class="ti ti-arrow-left"></i> Back</div>
-      <div class="screen-hd-title">Credits</div>
+      <div class="screen-hd-title">Scans</div>
       <div style="width:48px"></div>
     </div>
     <div class="balance-card">
       <div class="balance-eyebrow">Your balance</div>
       <div class="balance-num" id="balanceLarge">—</div>
-      <div class="balance-unit">credits</div>
-      <div class="balance-sub">1 scan = 5 credits</div>
+      <div class="balance-unit">scans</div>
+      <div class="balance-sub">Resets daily · top up for more</div>
     </div>
-    <div class="free-banner" id="freeBanner">You have <strong id="freeLeft">—</strong> free scans left</div>
-    <span class="section-title">Top up</span>
+    <div class="free-banner" id="freeBanner">You have <strong id="freeLeft">—</strong> free scans today</div>
+    <span class="section-title">Buy scans</span>
     <div class="packs">
       <div class="pack" onclick="buyPack('starter')">
-        <div class="pack-top"><div class="pack-name">Starter</div><div class="pack-price">$2.99</div></div>
-        <div class="pack-credits">50 credits <span class="pack-bonus">+10 bonus</span></div>
-        <div class="pack-per">= 12 scans · $0.06 / credit</div>
+        <div class="pack-top"><div class="pack-name">Starter</div><div class="pack-price" id="price-starter"></div></div>
+        <div class="pack-credits">12 scans <span class="pack-bonus">+2 bonus</span></div>
+        <div class="pack-per" id="per-starter"></div>
       </div>
       <div class="pack featured" onclick="buyPack('value')">
         <div class="pack-badge">Most popular</div>
-        <div class="pack-top"><div class="pack-name">Value</div><div class="pack-price">$6.99</div></div>
-        <div class="pack-credits">150 credits <span class="pack-bonus">+20 bonus</span></div>
-        <div class="pack-per">= 34 scans · $0.047 / credit</div>
+        <div class="pack-top"><div class="pack-name">Explorer</div><div class="pack-price" id="price-value"></div></div>
+        <div class="pack-credits">34 scans <span class="pack-bonus">+4 bonus</span></div>
+        <div class="pack-per" id="per-value"></div>
       </div>
       <div class="pack" onclick="buyPack('power')">
-        <div class="pack-top"><div class="pack-name">Power</div><div class="pack-price">$14.99</div></div>
-        <div class="pack-credits">400 credits <span class="pack-bonus">+75 bonus</span></div>
-        <div class="pack-per">= 95 scans · $0.037 / credit</div>
+        <div class="pack-top"><div class="pack-name">Legend</div><div class="pack-price" id="price-power"></div></div>
+        <div class="pack-credits">95 scans <span class="pack-bonus">+15 bonus</span></div>
+        <div class="pack-per" id="per-power"></div>
       </div>
     </div>
     <span class="section-title">Scan history</span>
@@ -697,9 +709,9 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
   <div class="paywall-card">
     <div class="paywall-pill"></div>
     <div class="paywall-icon"><svg width="24" height="28" viewBox="0 0 16 18" fill="none"><path d="M9.5 1L2 10.5H8L6.5 17L14 7.5H8L9.5 1Z" fill="#d4ff3c" stroke="#d4ff3c" stroke-width="0.5" stroke-linejoin="round"/></svg></div>
-    <div class="paywall-title">Out of credits</div>
-    <div class="paywall-sub">Top up to keep scanning.<br>Your history stays saved.</div>
-    <button class="paywall-btn" onclick="closePaywall(); showScreen('scrCredits')">See credit packs</button>
+    <div class="paywall-title">Out of scans</div>
+    <div class="paywall-sub">You've used today's free scans.<br>Top up or come back tomorrow.</div>
+    <button class="paywall-btn" onclick="closePaywall(); showScreen('scrCredits')">Get more scans</button>
     <button class="paywall-skip" onclick="closePaywall()">Maybe later</button>
   </div>
 </div>
@@ -799,10 +811,12 @@ function refreshUI() {
   const free = getFreeLeft();
 
   const chip = document.getElementById('creditChipLabel');
-  if (chip) chip.textContent = free > 0 ? `${free} scans left` : `${credits} cr`;
+  const totalScans = Math.floor(credits / COST_PER_SCAN);
+  if (chip) chip.textContent = free > 0 ? `${free} scans left` : totalScans > 0 ? `${totalScans} scans` : `Get scans`;
 
   const bal = document.getElementById('balanceLarge');
-  if (bal) bal.textContent = credits;
+  const totalScansDisplay = Math.floor(credits / COST_PER_SCAN);
+  if (bal) bal.textContent = free > 0 ? free + totalScansDisplay : totalScansDisplay;
 
   const banner = document.getElementById('freeBanner');
   const freeEl = document.getElementById('freeLeft');
@@ -886,7 +900,7 @@ function showScreen(id) {
   scr.style.animation = '';
   refreshUI();
   if (id === 'scrHistory') renderHistoryList();
-  if (id === 'scrCredits') renderCreditHistList();
+  if (id === 'scrCredits') { renderCreditHistList(); renderPackPrices(); }
   if (id === 'scrSettings') initSettingsScreen();
 }
 
@@ -896,10 +910,23 @@ function initSettingsScreen() {
   const credits = getCredits();
   const free = getFreeLeft();
   const el = document.getElementById('settingsCreditsLabel');
-  if (el) el.textContent = free > 0 ? `${free} free scans remaining` : `${credits} credits`;
+  const scLeft = Math.floor(credits / COST_PER_SCAN);
+  if (el) el.textContent = free > 0 ? `${free} free scans today · ${scLeft} paid scans` : scLeft > 0 ? `${scLeft} scans remaining` : `No scans left`;
   const toggle = document.getElementById('darkModeToggle');
   const theme = document.documentElement.getAttribute('data-theme');
   if (toggle) toggle.checked = theme === 'dark';
+  renderPackPrices();
+}
+
+function renderPackPrices() {
+  const PACK_USD = { starter: 2.99, value: 6.99, power: 14.99 };
+  const PACK_SCANS = { starter: 14, value: 38, power: 110 };
+  ['starter', 'value', 'power'].forEach(id => {
+    const priceEl = document.getElementById('price-' + id);
+    const perEl = document.getElementById('per-' + id);
+    if (priceEl) priceEl.textContent = formatPrice(PACK_USD[id]);
+    if (perEl) perEl.textContent = `= ${PACK_SCANS[id]} total · ${getCurrencySymbol()}${(convertPrice(PACK_USD[id]) / PACK_SCANS[id]).toFixed(2)} / scan`;
+  });
 }
 
 function switchTab(screenId, navId) {
@@ -910,6 +937,15 @@ function switchTab(screenId, navId) {
 
 function closePaywall() { document.getElementById('paywallOverlay').classList.remove('show'); }
 function openPaywall() { document.getElementById('paywallOverlay').classList.add('show'); }
+
+// Migrate from old lifetime credits to daily system
+(function migrateDailyScans() {
+  if (!localStorage.getItem(KEYS.lastFreeDate)) {
+    localStorage.removeItem(KEYS.freeScans); // clear old used count
+    localStorage.setItem(KEYS.lastFreeDate, new Date().toISOString().slice(0,10));
+    localStorage.setItem(KEYS.freeScans, '0');
+  }
+})();
 
 document.addEventListener('DOMContentLoaded', refreshUI);
 
@@ -1223,13 +1259,13 @@ function updatePhotoCount() {
 
 // ── PLATFORMS BY REGION ──
 const PLATFORM_REGIONS = {
-  'SI': { primary: ['Bolha.com', 'Facebook Marketplace'], secondary: ['Mimovrste', 'eBay'] },
+  'SI': { primary: ['Bolha.com', 'Facebook Marketplace'], secondary: ['eBay', 'Vinted'] },
   'HR': { primary: ['Njuškalo', 'Facebook Marketplace'], secondary: ['OLX', 'eBay'] },
   'RS': { primary: ['KupujemProdajem', 'Facebook Marketplace'], secondary: ['OLX', 'eBay'] },
-  'DE': { primary: ['eBay Kleinanzeigen', 'Facebook Marketplace'], secondary: ['eBay', 'Vinted'] },
-  'GB': { primary: ['eBay', 'Facebook Marketplace'], secondary: ['Gumtree', 'Depop'] },
-  'US': { primary: ['eBay', 'Facebook Marketplace'], secondary: ['Craigslist', 'Depop'] },
-  'default': { primary: ['eBay', 'Facebook Marketplace'], secondary: ['Craigslist', 'Depop'] }
+  'DE': { primary: ['eBay Kleinanzeigen', 'Facebook Marketplace'], secondary: ['Vinted', 'Depop'] },
+  'GB': { primary: ['eBay', 'Facebook Marketplace'], secondary: ['Depop', 'Vinted'] },
+  'US': { primary: ['eBay', 'Facebook Marketplace'], secondary: ['Depop', 'Mercari'] },
+  'default': { primary: ['eBay', 'Facebook Marketplace'], secondary: ['Depop', 'Vinted'] }
 };
 
 let userRegion = localStorage.getItem('qs_region') || 'default';
@@ -1308,12 +1344,24 @@ function resetProgress() {
 }
 function runLoadingAnimation() {
   return new Promise(resolve => {
-    let step = 0; renderSteps(0); setProgress(0.1);
-    const iv = setInterval(() => {
+    let step = 0;
+    renderSteps(0);
+    setProgress(0.05);
+    const stepDurations = [1200, 1800, 2000, 1500]; // ms per step — feels like real work
+    function doStep() {
+      if (step >= STEPS.length) {
+        setProgress(0.95);
+        renderSteps(STEPS.length);
+        resolve();
+        return;
+      }
+      renderSteps(step);
+      const targetPct = (step + 1) / STEPS.length * 0.92;
+      setProgress(targetPct);
       step++;
-      if (step >= STEPS.length) { clearInterval(iv); setProgress(0.95); renderSteps(STEPS.length); resolve(); return; }
-      renderSteps(step); setProgress((step + 1) / STEPS.length * 0.95);
-    }, 650);
+      setTimeout(doStep, stepDurations[step - 1] || 1000);
+    }
+    doStep();
   });
 }
 
@@ -1353,20 +1401,27 @@ async function analyzeImage() {
   const plats = getPlatforms();
   const platformList = [...plats.primary, ...plats.secondary].join(', ');
 
-  const prompt = `You are an expert resale pricer with deep knowledge of sold listings on eBay, Facebook Marketplace, and local resale platforms. CRITICAL: Always identify the actual PHYSICAL ITEM shown — never describe it as a photograph, image, or digital content. If you see a car, identify it as a car. If you see shoes, price the shoes. The user is selling the real physical object.
+  const prompt = `You are an expert resale pricer with deep knowledge of sold listings on eBay, Facebook Marketplace, and local resale platforms.
 
-Analyze this image and return a realistic secondhand price estimate.
+CRITICAL RULES:
+1. Always identify the actual PHYSICAL ITEM shown — never say "photograph of X", just identify X as the item being sold.
+2. price_low = realistic floor (item sells quickly at this price, condition considered)
+3. price_high = realistic ceiling (patient seller, item in this condition at best)
+4. sweet_spot = the price most likely to sell within 1-2 weeks given the EXACT condition visible. NOT a simple average. If condition is Poor, sweet_spot is closer to price_low. If Excellent, closer to price_high. Factor in demand for this specific item.
+5. rarity = how rare/collectible/in-demand this item is on the secondhand market, NOT based on price. A €5 vintage pin can be "rare". A €500 generic laptop is "common". Use your knowledge of collector markets.
 
 Respond ONLY with valid JSON — no markdown, no code fences:
 {
-  "item_name": "specific descriptive item name",
+  "item_name": "specific brand + model + descriptor",
   "condition": "Good",
-  "condition_note": "one sentence describing visible wear or condition",
+  "condition_note": "one concrete sentence about visible wear",
   "price_low": 18,
   "price_high": 42,
   "sweet_spot": 28,
-  "reasoning": "2-3 sentences explaining the price range based on what you see",
-  "listing_description": "ready-to-post 2-3 sentence marketplace listing, casual honest tone",
+  "rarity": "common",
+  "rarity_reason": "one sentence explaining why this item is common/rare/etc",
+  "reasoning": "2-3 sentences: what drives this price, how condition affects it, current market demand",
+  "listing_description": "ready-to-post 2-3 sentence listing, casual honest seller tone",
   "price_trend": [8, 10, 9, 11, 12, 11, 13],
   "price_history_months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Now"],
   "comparable_listings": [
@@ -1381,15 +1436,28 @@ Respond ONLY with valid JSON — no markdown, no code fences:
   ]
 }
 
-Rules:
+Rules for rarity field — must be exactly one of: trash / common / uncommon / rare / epic / legendary
+- trash: broken, no resale value, nobody wants it
+- common: sold by thousands, easy to find, generic demand
+- uncommon: somewhat sought after, specific buyer pool
+- rare: hard to find in this condition, collectors interested
+- epic: highly sought after, strong collector demand, limited supply
+- legendary: extremely rare, vintage/limited edition, or historically significant
+
+Rules for pricing:
 - condition must be exactly: Excellent / Good / Fair / Poor
-- price_trend: 7 numbers showing relative demand over 7 months (scale to match sweet_spot)
-- price_history_months: 7 labels, last one always "Now"
-- If item is antique/vintage (>20 years old), adjust months to years e.g. ["2018","2019","2020","2021","2022","2023","Now"]
-- If you cannot determine price history, return price_trend as empty array []
-- comparable_listings: 3 realistic recently sold similar items
+- sweet_spot must reflect condition: Poor=near price_low, Fair=lower third, Good=upper middle, Excellent=near price_high
+- price range should be TIGHT and realistic — max 1.8x spread (price_high < price_low * 1.8). If market price is well known, range can be even tighter.
+- For sneakers: use StockX/GOAT market data. Jordan 1 Retro High = $150-$280 depending on colorway and size. DO NOT exceed known market rates.
+- For electronics: check current eBay sold listings mentally. Be conservative.
+- For clothing: Vinted/Depop pricing — much lower than retail.
+- price_trend: 7 realistic numbers (can go down if declining demand)
+- price_history_months: 7 labels, last always "Now"
+- If antique/vintage (>20 years): use years ["2018","2019","2020","2021","2022","2023","Now"]
+- comparable_listings: 3 recently SOLD (not listed) items, realistic prices
+- For sneakers/streetwear, include StockX or GOAT as platform in comparable_listings
 - Preferred platforms for this user: ${platformList}
-- Base all prices on realistic US/EU market sold listings`;
+- Base all prices on realistic SOLD prices, not listing prices`;
 
   // Build messages — include all uploaded photos
   const imageContents = photos.filter(Boolean).map(p => ({
@@ -1643,23 +1711,33 @@ function showResultScreen(r) {
   const c1 = document.getElementById('creditChipLabel');
   if (c2 && c1) c2.textContent = c1.textContent;
 
-  // Rarity calc
-  const rarity = calcRarity(r.sweet_spot);
+  // Use AI rarity if available, fallback to price-based
+  const rarity = (r.rarity && ['trash','common','uncommon','rare','epic','legendary'].includes(r.rarity))
+    ? r.rarity
+    : calcRarity(r.sweet_spot);
   r._rarity = rarity;
   addToTotalValue(r.sweet_spot);
 
   const PLAT_URLS = {
     'eBay': `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(r.item_name)}&LH_Sold=1`,
     'Facebook Marketplace': `https://www.facebook.com/marketplace/search/?query=${encodeURIComponent(r.item_name)}`,
-    'Craigslist': `https://www.craigslist.org/search/sss?query=${encodeURIComponent(r.item_name)}`,
+    'StockX': `https://stockx.com/search?s=${encodeURIComponent(r.item_name)}`,
+    'GOAT': `https://www.goat.com/search?query=${encodeURIComponent(r.item_name)}`,
     'Depop': `https://www.depop.com/search/?q=${encodeURIComponent(r.item_name)}`,
+    'Vinted': `https://www.vinted.com/catalog?search_text=${encodeURIComponent(r.item_name)}`,
+    'Grailed': `https://www.grailed.com/search?search[query]=${encodeURIComponent(r.item_name)}`,
+    'Poshmark': `https://poshmark.com/search?query=${encodeURIComponent(r.item_name)}`,
+    'Mercari': `https://www.mercari.com/search/?keyword=${encodeURIComponent(r.item_name)}`,
+    'Vestiaire': `https://www.vestiairecollective.com/search/?q=${encodeURIComponent(r.item_name)}`,
+    'The RealReal': `https://www.therealreal.com/search?query=${encodeURIComponent(r.item_name)}`,
     'Bolha.com': `https://www.bolha.com/iskanje?q=${encodeURIComponent(r.item_name)}`,
     'Njuškalo': `https://www.njuskalo.hr/oglasi?q=${encodeURIComponent(r.item_name)}`,
-    'Vinted': `https://www.vinted.com/catalog?search_text=${encodeURIComponent(r.item_name)}`,
     'eBay Kleinanzeigen': `https://www.kleinanzeigen.de/s-${encodeURIComponent(r.item_name)}.html`,
     'Gumtree': `https://www.gumtree.com/search?search_category=all&q=${encodeURIComponent(r.item_name)}`,
     'KupujemProdajem': `https://www.kupujemprodajem.com/pretraga?keywords=${encodeURIComponent(r.item_name)}`,
     'OLX': `https://www.olx.ba/pretraga?q=${encodeURIComponent(r.item_name)}`,
+    'Craigslist': `https://www.craigslist.org/search/sss?query=${encodeURIComponent(r.item_name)}`,
+    'Whatnot': `https://www.whatnot.com/search?query=${encodeURIComponent(r.item_name)}`,
   };
   const best  = (r.best_platforms||[]).map(p=>{
     const url = PLAT_URLS[p] || `https://www.google.com/search?q=${encodeURIComponent(p+' '+r.item_name)}`;
@@ -1678,12 +1756,14 @@ function showResultScreen(r) {
   document.getElementById('resultArea').innerHTML = `
     <div class="result-card">
       <div class="r-hero ${glowClass}" id="heroCard">
-        <img class="r-hero-img" src="${heroImg}" alt="${r.item_name}">
+        <div class="r-hero-slides" id="heroSlides">
+          ${photos.filter(Boolean).map((p,i) => `<div class="r-hero-slide ${i===0?'active':''}" data-slide="${i}"><img src="${p.dataUrl}" alt=""></div>`).join('')}
+        </div>
         <div class="r-hero-overlay"></div>
+        <span class="rarity-badge-hero rarity-${rarity}"><i class="ti ${rarityIcon}"></i> ${rarityLabel}</span>
         <button class="r-hero-share" onclick="shareReport()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
         <div class="r-hero-content">
-          <span class="rarity-badge rarity-${rarity}"><i class="ti ${rarityIcon}"></i> ${rarityLabel} find</span>
-          <div class="r-hero-eyebrow">Identified item</div>
+          <div class="r-hero-eyebrow">${r.rarity_reason || "Identified item"}</div>
           <div class="r-hero-name">${r.item_name}</div>
           <div class="r-hero-price-row">
             <div class="r-hero-price" id="heroPriceEl">${formatPrice(r.price_high)}<span class="r-hero-price-sep" style="font-size:20px;margin:0 6px">–</span>${formatPrice(r.price_low)}</div>
@@ -1693,6 +1773,7 @@ function showResultScreen(r) {
             </div>
           </div>
         </div>
+        ${photos.filter(Boolean).length > 1 ? `<div class="r-hero-dots">${photos.filter(Boolean).map((_,i) => `<div class="r-hero-dot ${i===0?'active':''}" id="dot-${i}"></div>`).join('')}</div>` : ''}
       </div>
 
       <div class="r-card">
@@ -1753,6 +1834,46 @@ function showResultScreen(r) {
     setTimeout(() => triggerConfetti('small'), 150);
   } else if (navigator.vibrate) {
     navigator.vibrate(15);
+  }
+
+  // Count-up price animation
+  setTimeout(() => {
+    const priceEl = document.getElementById('heroPriceEl');
+    if (priceEl) {
+      const high = r.price_high, low = r.price_low;
+      const sym = getCurrencySymbol();
+      const rate = RATES[userCurrency] || 1;
+      // Duration scales with value — small items near instant, big items 1s
+      const maxVal = high * rate;
+      const duration = Math.min(1000, Math.max(300, maxVal * 1.2));
+      const totalFrames = Math.round(duration / 33);
+      let frame = 0;
+      function easeOut(t) { return 1 - Math.pow(1 - t, 4); }
+      const timer = setInterval(() => {
+        frame++;
+        const t = easeOut(Math.min(frame / totalFrames, 1));
+        const curHigh = Math.round(high * rate * t);
+        const curLow = Math.round(low * rate * t);
+        priceEl.innerHTML = `${sym}${curHigh}<span class="r-hero-price-sep" style="font-size:20px;margin:0 6px">–</span>${sym}${curLow}`;
+        if (frame >= totalFrames) clearInterval(timer);
+      }, 33);
+    }
+  }, 200);
+
+  // Auto slideshow if multiple photos
+  const slideCount = photos.filter(Boolean).length;
+  if (slideCount > 1) {
+    let currentSlide = 0;
+    setInterval(() => {
+      const slides = document.querySelectorAll('.r-hero-slide');
+      const dots = document.querySelectorAll('.r-hero-dot');
+      if (!slides.length) return;
+      slides[currentSlide].classList.remove('active');
+      if (dots[currentSlide]) dots[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slideCount;
+      slides[currentSlide].classList.add('active');
+      if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+    }, 4000);
   }
 }
 
