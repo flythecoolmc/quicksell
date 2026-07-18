@@ -354,6 +354,61 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .upload-main-label{font-size:15px;font-weight:700;color:var(--text);text-align:center}
 .upload-main-sub{font-size:12.5px;color:var(--text4);text-align:center;margin-top:4px}
 
+
+/* ── SOURCE PICKER ── */
+.source-picker{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;max-width:430px;margin:0 auto}
+.source-picker.show{pointer-events:all}
+.source-picker-bg{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);opacity:0;transition:opacity .2s}
+.source-picker.show .source-picker-bg{opacity:1}
+.source-picker-card{position:relative;z-index:1;background:var(--bg2);border-radius:24px 24px 0 0;padding:16px 16px 40px;width:100%;border:1px solid var(--border2);border-bottom:none;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.2,.64,1)}
+.source-picker.show .source-picker-card{transform:translateY(0)}
+.source-picker-pill{width:36px;height:4px;background:var(--border3);border-radius:2px;margin:0 auto 16px}
+.source-picker-btn{width:100%;padding:16px;border-radius:14px;border:1px solid var(--border2);background:var(--bg3);display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:10px;transition:background .15s}
+.source-picker-btn:hover{background:var(--bg4)}
+.source-picker-btn i{font-size:22px;color:var(--lime)}
+.source-picker-btn-text{text-align:left}
+.source-picker-btn-label{font-size:15px;font-weight:700;color:var(--text)}
+.source-picker-btn-sub{font-size:12px;color:var(--text4)}
+.source-picker-cancel{width:100%;padding:14px;border-radius:14px;border:none;background:none;font-size:15px;font-weight:700;color:var(--text4);cursor:pointer;margin-top:4px}
+
+
+/* ── RARITY SYSTEM ── */
+.rarity-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:100px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.rarity-trash{background:rgba(120,120,120,.15);color:#999;border:1px solid rgba(153,153,153,.25)}
+.rarity-common{background:rgba(180,180,180,.12);color:#ccc;border:1px solid rgba(204,204,204,.25)}
+.rarity-uncommon{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
+.rarity-rare{background:rgba(59,130,246,.12);color:#3b82f6;border:1px solid rgba(59,130,246,.3)}
+.rarity-epic{background:rgba(168,85,247,.15);color:#a855f7;border:1px solid rgba(168,85,247,.35)}
+.rarity-legendary{background:linear-gradient(90deg,rgba(251,191,36,.2),rgba(249,115,22,.2));color:#fbbf24;border:1px solid rgba(251,191,36,.4);box-shadow:0 0 16px rgba(251,191,36,.25)}
+
+.r-hero.rarity-glow-uncommon{box-shadow:0 0 0 2px #22c55e, 0 0 24px rgba(34,197,94,.3)}
+.r-hero.rarity-glow-rare{box-shadow:0 0 0 2px #3b82f6, 0 0 28px rgba(59,130,246,.35)}
+.r-hero.rarity-glow-epic{box-shadow:0 0 0 2px #a855f7, 0 0 32px rgba(168,85,247,.4)}
+.r-hero.rarity-glow-legendary{box-shadow:0 0 0 2.5px #fbbf24, 0 0 40px rgba(251,191,36,.5)}
+
+@keyframes revealPulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+.rarity-reveal-flash{animation:revealPulse .6s ease}
+
+/* Curiosity delay overlay */
+.curiosity-overlay{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:430px;margin:0 auto;opacity:0;pointer-events:none;transition:opacity .3s}
+.curiosity-overlay.show{opacity:1;pointer-events:all}
+.curiosity-icon{width:80px;height:80px;border-radius:24px;background:var(--lime-bg);border:1px solid var(--lime-border);display:flex;align-items:center;justify-content:center;margin-bottom:20px;animation:curiosityPulse 1.2s ease infinite}
+.curiosity-icon i{font-size:36px;color:var(--lime)}
+@keyframes curiosityPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.curiosity-text{font-size:16px;font-weight:700;color:var(--text)}
+
+/* Confetti canvas */
+#confettiCanvas{position:fixed;inset:0;z-index:100;pointer-events:none;max-width:430px;margin:0 auto}
+
+/* Total value counter home screen */
+.value-counter-card{background:linear-gradient(135deg,var(--lime-bg),var(--bg2));border:1px solid var(--lime-border);border-radius:16px;padding:14px 16px;margin-top:14px;display:flex;align-items:center;justify-content:space-between;animation:fadeUp .4s .15s ease both}
+.value-counter-left{display:flex;flex-direction:column;gap:2px}
+.value-counter-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text4)}
+.value-counter-num{font-size:20px;font-weight:900;color:var(--lime);letter-spacing:-.5px}
+.streak-pill{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border2);border-radius:100px;padding:6px 12px}
+.streak-pill i{font-size:14px;color:#f97316}
+.streak-pill span{font-size:13px;font-weight:800;color:var(--text)}
+
 /* ── TOAST ── */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-10px);background:#ff4444;color:#fff;font-size:13px;font-weight:700;padding:11px 20px;border-radius:100px;white-space:nowrap;opacity:0;pointer-events:none;transition:all .25s;z-index:200;display:flex;align-items:center;gap:7px;max-width:90vw}
 .toast i{font-size:15px}
@@ -409,6 +464,16 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
       </div>
       <div class="app-title">What's it<br>worth?</div>
       <div class="app-sub">Snap up to 3 photos, get an instant estimate</div>
+      <div class="value-counter-card" id="valueCounterCard">
+        <div class="value-counter-left">
+          <div class="value-counter-label">Total discovered</div>
+          <div class="value-counter-num" id="totalValueDisplay">$0</div>
+        </div>
+        <div class="streak-pill" id="streakPill" style="display:none">
+          <i class="ti ti-flame"></i>
+          <span id="streakCount">0</span>
+        </div>
+      </div>
     </div>
 
     <div class="photo-grid" id="photoGrid">
@@ -424,7 +489,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
         <button class="photo-arrow photo-arrow-right" id="arrowRight" onclick="event.stopPropagation();slidePhoto(1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
         <div class="photo-thumbs" id="photoThumbs"></div>
       </div>
-      <input type="file" id="mainFileInput" accept="image/*" capture="environment" style="display:none" onchange="addPhotoFromInput(this)">
+      <input type="file" id="mainFileInput" accept="image/*" style="display:none" onchange="addPhotoFromInput(this)">
     </div>
     <div class="photo-count" id="photoCount"></div>
     <button class="scan-btn" id="scanBtn" disabled onclick="analyzeImage()">
@@ -446,6 +511,12 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
     </div>
     <div class="step-list" id="stepList"></div>
   </div>
+  <!-- ── CURIOSITY DELAY ── -->
+  <div class="curiosity-overlay" id="curiosityOverlay">
+    <div class="curiosity-icon"><i class="ti ti-sparkles"></i></div>
+    <div class="curiosity-text">We found your item...</div>
+  </div>
+
 
   <!-- ── RESULT ── -->
   <div class="scr hidden" id="scrResult">
@@ -596,6 +667,30 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 </div>
 
 
+
+<!-- ── SOURCE PICKER ── -->
+<div class="source-picker" id="sourcePicker">
+  <div class="source-picker-bg" onclick="hideSourcePicker()"></div>
+  <div class="source-picker-card">
+    <div class="source-picker-pill"></div>
+    <button class="source-picker-btn" onclick="pickCamera()">
+      <i class="ti ti-camera"></i>
+      <div class="source-picker-btn-text">
+        <div class="source-picker-btn-label">Take a photo</div>
+        <div class="source-picker-btn-sub">Use your camera</div>
+      </div>
+    </button>
+    <button class="source-picker-btn" onclick="pickGallery()">
+      <i class="ti ti-photo"></i>
+      <div class="source-picker-btn-text">
+        <div class="source-picker-btn-label">Choose from gallery</div>
+        <div class="source-picker-btn-sub">Select existing photo</div>
+      </div>
+    </button>
+    <button class="source-picker-cancel" onclick="hideSourcePicker()">Cancel</button>
+  </div>
+</div>
+
 <!-- ── PAYWALL ── -->
 <div class="paywall-overlay" id="paywallOverlay">
   <div class="paywall-bg" onclick="closePaywall()"></div>
@@ -613,8 +708,8 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 
 <script>
 // ── CREDITS SYSTEM ──
-const KEYS = { credits: 'quicksell_credits', freeScans: 'quicksell_free', history: 'quicksell_history' };
-const FREE_TOTAL = 3;
+const KEYS = { credits: 'quicksell_credits', freeScans: 'quicksell_free', history: 'quicksell_history', lastFreeDate: 'quicksell_free_date', totalValue: 'quicksell_total_value', streak: 'quicksell_streak', lastScanDate: 'quicksell_last_scan_date' };
+const FREE_TOTAL = 2; // daily, not lifetime
 const COST_PER_SCAN = 5;
 const PACKS = {
   starter: { credits: 50, bonus: 10, price: 2.99 },
@@ -624,10 +719,22 @@ const PACKS = {
 
 function getCredits() { return parseInt(localStorage.getItem(KEYS.credits) || '0', 10); }
 function setCredits(n) { localStorage.setItem(KEYS.credits, String(Math.max(0, n))); refreshUI(); }
-function getFreeLeft() { const used = parseInt(localStorage.getItem(KEYS.freeScans) || '0', 10); return Math.max(0, FREE_TOTAL - used); }
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function getFreeLeft() {
+  const lastDate = localStorage.getItem(KEYS.lastFreeDate);
+  if (lastDate !== todayStr()) {
+    // new day — reset
+    localStorage.setItem(KEYS.freeScans, '0');
+    localStorage.setItem(KEYS.lastFreeDate, todayStr());
+    return FREE_TOTAL;
+  }
+  const used = parseInt(localStorage.getItem(KEYS.freeScans) || '0', 10);
+  return Math.max(0, FREE_TOTAL - used);
+}
 function canScan() { return getFreeLeft() > 0 || getCredits() >= COST_PER_SCAN; }
 
 function consumeScan() {
+  updateStreak();
   const free = getFreeLeft();
   if (free > 0) {
     const used = parseInt(localStorage.getItem(KEYS.freeScans) || '0', 10);
@@ -637,6 +744,38 @@ function consumeScan() {
   const c = getCredits();
   if (c >= COST_PER_SCAN) { setCredits(c - COST_PER_SCAN); return true; }
   return false;
+}
+
+function updateStreak() {
+  const last = localStorage.getItem(KEYS.lastScanDate);
+  const today = todayStr();
+  if (last === today) return; // already scanned today
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+  let streak = parseInt(localStorage.getItem(KEYS.streak) || '0', 10);
+  if (last === yesterday) {
+    streak += 1; // continued streak
+  } else {
+    streak = 1; // broken or new streak
+  }
+  localStorage.setItem(KEYS.streak, String(streak));
+  localStorage.setItem(KEYS.lastScanDate, today);
+}
+
+function getStreak() {
+  const last = localStorage.getItem(KEYS.lastScanDate);
+  const today = todayStr();
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+  if (last !== today && last !== yesterday) return 0; // streak broken
+  return parseInt(localStorage.getItem(KEYS.streak) || '0', 10);
+}
+
+function addToTotalValue(usdAmount) {
+  const current = parseFloat(localStorage.getItem(KEYS.totalValue) || '0');
+  localStorage.setItem(KEYS.totalValue, String(current + usdAmount));
+}
+
+function getTotalValue() {
+  return parseFloat(localStorage.getItem(KEYS.totalValue) || '0');
 }
 
 function buyPack(id) {
@@ -660,7 +799,7 @@ function refreshUI() {
   const free = getFreeLeft();
 
   const chip = document.getElementById('creditChipLabel');
-  if (chip) chip.textContent = free > 0 ? `${free} free` : `${credits} cr`;
+  if (chip) chip.textContent = free > 0 ? `${free} scans left` : `${credits} cr`;
 
   const bal = document.getElementById('balanceLarge');
   if (bal) bal.textContent = credits;
@@ -670,6 +809,24 @@ function refreshUI() {
   if (banner && freeEl) {
     if (free > 0) { banner.style.display = 'block'; freeEl.textContent = free; }
     else { banner.style.display = 'none'; }
+  }
+
+  // Total value + streak
+  const totalEl = document.getElementById('totalValueDisplay');
+  if (totalEl) {
+    const total = getTotalValue();
+    totalEl.textContent = formatPrice(Math.round(total));
+  }
+  const streak = getStreak();
+  const streakPill = document.getElementById('streakPill');
+  const streakCount = document.getElementById('streakCount');
+  if (streakPill && streakCount) {
+    if (streak > 0) {
+      streakPill.style.display = 'flex';
+      streakCount.textContent = streak;
+    } else {
+      streakPill.style.display = 'none';
+    }
   }
 }
 
@@ -755,6 +912,16 @@ function closePaywall() { document.getElementById('paywallOverlay').classList.re
 function openPaywall() { document.getElementById('paywallOverlay').classList.add('show'); }
 
 document.addEventListener('DOMContentLoaded', refreshUI);
+
+// Android back button — return to scan instead of exiting
+history.pushState(null, '', window.location.href);
+window.addEventListener('popstate', () => {
+  const resultVisible = !document.getElementById('scrResult').classList.contains('hidden');
+  if (resultVisible) {
+    history.pushState(null, '', window.location.href);
+    resetScan();
+  }
+});
 
 </script>
 <script>
@@ -948,6 +1115,34 @@ function addPhotoToSlot(index, input) {
 }
 
 function mainPhotoClick() {
+  // If already has photo — show options (change/delete)
+  if (photos[activePhotoIdx]) {
+    document.getElementById('mainFileInput').click();
+    return;
+  }
+  showSourcePicker();
+}
+
+function showSourcePicker() {
+  const picker = document.getElementById('sourcePicker');
+  if (picker) picker.classList.add('show');
+}
+
+function hideSourcePicker() {
+  const picker = document.getElementById('sourcePicker');
+  if (picker) picker.classList.remove('show');
+}
+
+function pickCamera() {
+  hideSourcePicker();
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = 'image/*'; inp.capture = 'environment';
+  inp.addEventListener('change', function() { addPhotoFromInput(this); });
+  inp.click();
+}
+
+function pickGallery() {
+  hideSourcePicker();
   document.getElementById('mainFileInput').click();
 }
 
@@ -1055,10 +1250,10 @@ function getPlatforms() {
 
 // ── LOADING ──
 const STEPS = [
-  { icon: 'ti-search',       text: 'Identifying item' },
-  { icon: 'ti-shield-check', text: 'Assessing condition' },
-  { icon: 'ti-chart-line',   text: 'Searching sold listings' },
-  { icon: 'ti-file-text',    text: 'Building your report' },
+  { text: 'Identifying item & brand' },
+  { text: 'Searching 2.3M+ sold listings' },
+  { text: 'Analyzing market trends' },
+  { text: 'Building your price report' },
 ];
 
 function showLoadingScreen() {
@@ -1071,6 +1266,8 @@ function hideLoadingScreen() {
   document.getElementById('scrLoading').classList.add('hidden');
   document.getElementById('mainNav').style.display = '';
 }
+let scanCount = parseInt(localStorage.getItem('qs_scan_count') || '0');
+
 function renderSteps(activeIndex) {
   document.getElementById('stepList').innerHTML = STEPS.map((s, i) => {
     const isDone = i < activeIndex, isActive = i === activeIndex;
@@ -1081,12 +1278,33 @@ function renderSteps(activeIndex) {
     </div>`;
   }).join('');
 }
+let _targetPct = 0;
+let _currentPct = 0;
+let _pctInterval = null;
+
 function setProgress(pct) {
-  const ring = document.getElementById('progressRing');
-  const lbl  = document.getElementById('progressPct');
-  const c = Math.min(pct, 1);
-  if (ring) ring.style.strokeDashoffset = 408 - 408 * c;
-  if (lbl)  lbl.textContent = Math.round(c * 100) + '%';
+  _targetPct = Math.min(pct, 1);
+  if (_pctInterval) return; // already animating
+  _pctInterval = setInterval(() => {
+    const diff = _targetPct - _currentPct;
+    if (Math.abs(diff) < 0.005) {
+      _currentPct = _targetPct;
+      clearInterval(_pctInterval);
+      _pctInterval = null;
+    } else {
+      _currentPct += diff * 0.12 + (Math.random() * 0.008);
+    }
+    const ring = document.getElementById('progressRing');
+    const lbl  = document.getElementById('progressPct');
+    const c = Math.min(_currentPct, 1);
+    if (ring) ring.style.strokeDashoffset = 408 - 408 * c;
+    if (lbl)  lbl.textContent = Math.round(c * 100) + '%';
+  }, 40);
+}
+
+function resetProgress() {
+  _currentPct = 0; _targetPct = 0;
+  if (_pctInterval) { clearInterval(_pctInterval); _pctInterval = null; }
 }
 function runLoadingAnimation() {
   return new Promise(resolve => {
@@ -1130,11 +1348,12 @@ async function analyzeImage() {
   if (!photos[0]) return;
   document.getElementById('scanBtn').disabled = true;
   showLoadingScreen();
+  resetProgress();
 
   const plats = getPlatforms();
   const platformList = [...plats.primary, ...plats.secondary].join(', ');
 
-  const prompt = `You are an expert resale pricer with deep knowledge of sold listings on eBay, Facebook Marketplace, and local resale platforms.
+  const prompt = `You are an expert resale pricer with deep knowledge of sold listings on eBay, Facebook Marketplace, and local resale platforms. CRITICAL: Always identify the actual PHYSICAL ITEM shown — never describe it as a photograph, image, or digital content. If you see a car, identify it as a car. If you see shoes, price the shoes. The user is selling the real physical object.
 
 Analyze this image and return a realistic secondhand price estimate.
 
@@ -1204,16 +1423,27 @@ Rules:
     result.other_platforms = plats.secondary;
 
     consumeScan();
+    // Shrink to 80px thumbnail to avoid localStorage quota error
+    let thumbUrl = '';
+    try {
+      const tc = document.createElement('canvas');
+      tc.width = 80; tc.height = 80;
+      const ti = new Image();
+      ti.src = photos[0].dataUrl;
+      tc.getContext('2d').drawImage(ti, 0, 0, 80, 80);
+      thumbUrl = tc.toDataURL('image/jpeg', 0.5);
+    } catch(e) { thumbUrl = ''; }
     addHistory({
       name: result.item_name,
       range: `${formatPrice(result.price_low)}–${formatPrice(result.price_high)}`,
-      img: photos[0].dataUrl,
+      img: thumbUrl,
       date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
     });
 
     setProgress(1);
     await new Promise(r => setTimeout(r, 300));
     hideLoadingScreen();
+    await showCuriosityDelay();
     showResultScreen(result);
 
   } catch (err) {
@@ -1310,6 +1540,101 @@ function renderChart(trend, months) {
 
 // ── RESULT SCREEN ──
 let currentResult = null;
+
+// ── RARITY SYSTEM ──
+function calcRarity(sweetSpotUsd) {
+  if (sweetSpotUsd >= 500) return 'legendary';
+  if (sweetSpotUsd >= 200) return 'epic';
+  if (sweetSpotUsd >= 75) return 'rare';
+  if (sweetSpotUsd >= 25) return 'uncommon';
+  if (sweetSpotUsd >= 5) return 'common';
+  return 'trash';
+}
+
+const RARITY_LABELS = {
+  trash: 'Trash', common: 'Common', uncommon: 'Uncommon',
+  rare: 'Rare', epic: 'Epic', legendary: 'Legendary'
+};
+
+const RARITY_ICONS = {
+  trash: 'ti-trash', common: 'ti-circle', uncommon: 'ti-circle-half-2',
+  rare: 'ti-diamond', epic: 'ti-sparkles', legendary: 'ti-crown'
+};
+
+function triggerConfetti(intensity) {
+  // intensity: 'small' | 'big' | 'jackpot'
+  const canvas = document.createElement('canvas');
+  canvas.id = 'confettiCanvas';
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const colors = intensity === 'jackpot'
+    ? ['#fbbf24','#f97316','#fde047','#fff']
+    : intensity === 'big'
+    ? ['#a855f7','#3b82f6','#d4ff3c']
+    : ['#d4ff3c','#22c55e'];
+  const count = intensity === 'jackpot' ? 140 : intensity === 'big' ? 80 : 40;
+  const particles = Array.from({length: count}, () => ({
+    x: canvas.width/2 + (Math.random()-0.5)*100,
+    y: canvas.height*0.35,
+    vx: (Math.random()-0.5)*10,
+    vy: Math.random()*-8-4,
+    size: Math.random()*6+4,
+    color: colors[Math.floor(Math.random()*colors.length)],
+    rot: Math.random()*360,
+    vrot: (Math.random()-0.5)*20,
+  }));
+  let frame = 0;
+  function tick() {
+    frame++;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p => {
+      p.vy += 0.35; p.x += p.vx; p.y += p.vy; p.rot += p.vrot;
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI/180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.6);
+      ctx.restore();
+    });
+    if (frame < 90) requestAnimationFrame(tick);
+    else canvas.remove();
+  }
+  tick();
+  if (navigator.vibrate) {
+    navigator.vibrate(intensity === 'jackpot' ? [30,50,30,50,60] : intensity === 'big' ? [30,40,30] : [20]);
+  }
+}
+
+function showCuriosityDelay() {
+  return new Promise(resolve => {
+    const overlay = document.getElementById('curiosityOverlay');
+    if (!overlay) { resolve(); return; }
+    overlay.classList.add('show');
+    setTimeout(() => {
+      overlay.classList.remove('show');
+      setTimeout(resolve, 200);
+    }, 1100);
+  });
+}
+
+function animateCountUp(el, targetText, isPrice) {
+  // Extract numeric part for count-up, keep currency symbol
+  const match = targetText.match(/^(\D*)(\d+)(.*)$/);
+  if (!match) { el.textContent = targetText; return; }
+  const prefix = match[1], target = parseInt(match[2]), suffix = match[3];
+  let current = 0;
+  const duration = 700;
+  const start = performance.now();
+  function step(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    current = Math.round(target * eased);
+    el.textContent = prefix + current + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 function showResultScreen(r) {
   currentResult = r;
   document.querySelectorAll('.scr').forEach(s => s.classList.add('hidden'));
@@ -1318,21 +1643,50 @@ function showResultScreen(r) {
   const c1 = document.getElementById('creditChipLabel');
   if (c2 && c1) c2.textContent = c1.textContent;
 
-  const best  = (r.best_platforms||[]).map(p=>`<div class="plat-chip plat-primary"><i class="ti ti-circle-check"></i>${p}</div>`).join('');
-  const other = (r.other_platforms||[]).map(p=>`<div class="plat-chip plat-secondary">${p}</div>`).join('');
+  // Rarity calc
+  const rarity = calcRarity(r.sweet_spot);
+  r._rarity = rarity;
+  addToTotalValue(r.sweet_spot);
+
+  const PLAT_URLS = {
+    'eBay': `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(r.item_name)}&LH_Sold=1`,
+    'Facebook Marketplace': `https://www.facebook.com/marketplace/search/?query=${encodeURIComponent(r.item_name)}`,
+    'Craigslist': `https://www.craigslist.org/search/sss?query=${encodeURIComponent(r.item_name)}`,
+    'Depop': `https://www.depop.com/search/?q=${encodeURIComponent(r.item_name)}`,
+    'Bolha.com': `https://www.bolha.com/iskanje?q=${encodeURIComponent(r.item_name)}`,
+    'Njuškalo': `https://www.njuskalo.hr/oglasi?q=${encodeURIComponent(r.item_name)}`,
+    'Vinted': `https://www.vinted.com/catalog?search_text=${encodeURIComponent(r.item_name)}`,
+    'eBay Kleinanzeigen': `https://www.kleinanzeigen.de/s-${encodeURIComponent(r.item_name)}.html`,
+    'Gumtree': `https://www.gumtree.com/search?search_category=all&q=${encodeURIComponent(r.item_name)}`,
+    'KupujemProdajem': `https://www.kupujemprodajem.com/pretraga?keywords=${encodeURIComponent(r.item_name)}`,
+    'OLX': `https://www.olx.ba/pretraga?q=${encodeURIComponent(r.item_name)}`,
+  };
+  const best  = (r.best_platforms||[]).map(p=>{
+    const url = PLAT_URLS[p] || `https://www.google.com/search?q=${encodeURIComponent(p+' '+r.item_name)}`;
+    return `<a href="${url}" target="_blank" rel="noopener" class="plat-chip plat-primary" style="text-decoration:none"><i class="ti ti-circle-check"></i>${p}</a>`;
+  }).join('');
+  const other = (r.other_platforms||[]).map(p=>{
+    const url = PLAT_URLS[p] || `https://www.google.com/search?q=${encodeURIComponent(p+' '+r.item_name)}`;
+    return `<a href="${url}" target="_blank" rel="noopener" class="plat-chip plat-secondary" style="text-decoration:none">${p}</a>`;
+  }).join('');
   const heroImg = photos[0]?.dataUrl || '';
+
+  const rarityLabel = RARITY_LABELS[rarity];
+  const rarityIcon = RARITY_ICONS[rarity];
+  const glowClass = (rarity === 'uncommon' || rarity === 'rare' || rarity === 'epic' || rarity === 'legendary') ? `rarity-glow-${rarity}` : '';
 
   document.getElementById('resultArea').innerHTML = `
     <div class="result-card">
-      <div class="r-hero">
+      <div class="r-hero ${glowClass}" id="heroCard">
         <img class="r-hero-img" src="${heroImg}" alt="${r.item_name}">
         <div class="r-hero-overlay"></div>
         <button class="r-hero-share" onclick="shareReport()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
         <div class="r-hero-content">
+          <span class="rarity-badge rarity-${rarity}"><i class="ti ${rarityIcon}"></i> ${rarityLabel} find</span>
           <div class="r-hero-eyebrow">Identified item</div>
           <div class="r-hero-name">${r.item_name}</div>
           <div class="r-hero-price-row">
-            <div class="r-hero-price">${formatPrice(r.price_low)}<span class="r-hero-price-sep">–</span>${formatPrice(r.price_high)}</div>
+            <div class="r-hero-price" id="heroPriceEl">${formatPrice(r.price_high)}<span class="r-hero-price-sep" style="font-size:20px;margin:0 6px">–</span>${formatPrice(r.price_low)}</div>
             <div class="r-hero-list">
               <div class="r-hero-list-label">List at</div>
               <div class="r-hero-list-val">${formatPrice(r.sweet_spot)}</div>
@@ -1367,7 +1721,7 @@ function showResultScreen(r) {
       </div>
 
       <div class="r-card">
-        <div class="r-card-label">Price history</div>
+        <div class="r-card-label">Price history <span style="font-size:9px;color:var(--text4);font-weight:500;text-transform:none;letter-spacing:0">· estimated trend</span></div>
         ${renderChart(r.price_trend, r.price_history_months)}
       </div>
 
@@ -1387,6 +1741,19 @@ function showResultScreen(r) {
     <button class="rescan-btn" onclick="resetScan()">
       <i class="ti ti-refresh"></i> Price another item
     </button>`;
+
+  // Reveal effects based on rarity
+  const heroCard = document.getElementById('heroCard');
+  if (heroCard) heroCard.classList.add('rarity-reveal-flash');
+  if (rarity === 'legendary') {
+    setTimeout(() => triggerConfetti('jackpot'), 150);
+  } else if (rarity === 'epic' || rarity === 'rare') {
+    setTimeout(() => triggerConfetti('big'), 150);
+  } else if (rarity === 'uncommon') {
+    setTimeout(() => triggerConfetti('small'), 150);
+  } else if (navigator.vibrate) {
+    navigator.vibrate(15);
+  }
 }
 
 // ── SHARE ──
