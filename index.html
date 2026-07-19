@@ -88,7 +88,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .photo-thumbs{position:absolute;bottom:10px;left:10px;display:flex;flex-direction:row;gap:6px;z-index:4}
 .photo-thumb{width:52px;height:52px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid rgba(255,255,255,.2);transition:border-color .15s;flex-shrink:0}
 .photo-thumb.active{border-color:var(--lime)}
-.photo-thumb.empty{background:rgba(0,0,0,.45);backdrop-filter:blur(8px);border:1.5px dashed rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center}
+.photo-thumb.empty{background:rgba(0,0,0,.45);backdrop-filter:blur(8px);border:1.5px dashed rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:22px;color:rgba(255,255,255,.5)}
 .photo-thumb.empty i{font-size:18px;color:rgba(255,255,255,.35);pointer-events:none}
 .photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .photo-thumb-add{width:52px;height:52px;border-radius:10px;border:1.5px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.45);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;position:relative}
@@ -613,12 +613,14 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
       <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--lime);margin-bottom:6px">⭐ Most Popular</div>
       <div style="font-size:20px;font-weight:900;color:#fff;margin-bottom:4px">QuickSell Pro</div>
       <div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px;line-height:1.5">Unlimited scans · Price alerts · No ads · Pro badge</div>
-      <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:16px">
-        <span style="font-size:32px;font-weight:900;color:var(--lime)">€3.99</span>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px">
+        <span id="proOldPrice" style="font-size:18px;font-weight:700;color:rgba(255,255,255,.4);text-decoration:line-through;display:none">€3.99</span>
+        <span id="proPriceDisplay" style="font-size:32px;font-weight:900;color:var(--lime)">€3.99</span>
         <span style="font-size:14px;color:rgba(255,255,255,.5)">/month</span>
         <span style="font-size:11px;font-weight:700;background:rgba(212,255,60,.15);color:var(--lime);border:1px solid rgba(212,255,60,.3);border-radius:100px;padding:2px 8px">BEST VALUE</span>
       </div>
-      <button onclick="buyPack('pro')" style="width:100%;padding:14px;background:var(--lime);border:none;border-radius:14px;font-size:15px;font-weight:800;color:#0d0d0d;cursor:pointer">Start Pro — €3.99/mo →</button>
+      <div id="proFlashNote" style="display:none;font-size:11px;color:rgba(212,255,60,.7);margin-bottom:12px">⚡ Flash offer — first week only, then €3.99/mo</div>
+      <button id="proSubBtn" onclick="buyPack('pro')" style="width:100%;padding:14px;background:var(--lime);border:none;border-radius:14px;font-size:15px;font-weight:800;color:#0d0d0d;cursor:pointer">Start Pro — €3.99/mo →</button>
       <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,.35)">Cancel anytime</div>
     </div>
 
@@ -784,7 +786,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
       </div>
       <div style="font-size:11px;color:var(--text4)">Then €3.99/mo · Cancel anytime</div>
     </div>
-    <button class="flash-offer-btn" onclick="closeFlashOffer(); showScreen('scrCredits')">Start Pro for €0.99 →</button>
+    <button class="flash-offer-btn" onclick="closeFlashOffer(); _flashActive=true; showScreen('scrCredits'); renderPackPrices();">Start Pro for €0.99 →</button>
     <button class="flash-offer-skip" onclick="closeFlashOffer()">Maybe later</button>
   </div>
 </div>
@@ -961,8 +963,13 @@ function getTotalValue() {
 function buyPack(id) {
   const p = PACKS[id];
   if (!p) return;
-  setCredits(getCredits() + p.credits + p.bonus);
-  showToast(`+${p.credits + p.bonus} credits added`);
+  const newCredits = getCredits() + p.credits + p.bonus;
+  setCredits(newCredits);
+  const scansAdded = Math.floor((p.credits + p.bonus) / COST_PER_SCAN);
+  // Push to KV so balance is saved server-side
+  pushBalanceToKV(newCredits, parseInt(localStorage.getItem(KEYS.freeScans) || '0'));
+  refreshUI();
+  showToast(`+${scansAdded} scans added!`, 'success');
 }
 
 function getHistory() { try { return JSON.parse(localStorage.getItem(KEYS.history) || '[]'); } catch { return []; } }
@@ -1111,10 +1118,13 @@ function renderCreditHistList() {
   el.innerHTML = h.map(historyRowHTML).join('');
 }
 
-function showToast(msg) {
+function showToast(msg, type) {
   const t = document.getElementById('toast');
   if (!t) return;
   t.textContent = msg;
+  t.style.background = type === 'success' ? '#1a3a0a' : type === 'error' ? '#3a0a0a' : 'var(--bg2)';
+  t.style.borderColor = type === 'success' ? 'var(--lime)' : type === 'error' ? '#ff4444' : 'var(--border2)';
+  t.style.color = type === 'success' ? 'var(--lime)' : type === 'error' ? '#ff6666' : 'var(--text)';
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2600);
 }
@@ -1155,6 +1165,23 @@ function renderPackPrices() {
     if (priceEl) priceEl.textContent = formatPrice(PACK_USD[id]);
     if (perEl) perEl.textContent = `= ${PACK_SCANS[id]} total · ${getCurrencySymbol()}${(convertPrice(PACK_USD[id]) / PACK_SCANS[id]).toFixed(2)} / scan`;
   });
+
+  // Flash Pro offer on credits screen
+  const proBtn = document.getElementById('proSubBtn');
+  const proPrice = document.getElementById('proPriceDisplay');
+  const proOld = document.getElementById('proOldPrice');
+  const proFlashNote = document.getElementById('proFlashNote');
+  if (_flashActive) {
+    if (proPrice) proPrice.textContent = getCurrencySymbol() + '0.99';
+    if (proOld) { proOld.style.display = 'inline'; proOld.textContent = getCurrencySymbol() + '3.99'; }
+    if (proFlashNote) proFlashNote.style.display = 'block';
+    if (proBtn) proBtn.textContent = 'Start Pro for ' + getCurrencySymbol() + '0.99 → (Limited offer)';
+  } else {
+    if (proPrice) proPrice.textContent = getCurrencySymbol() + '3.99';
+    if (proOld) proOld.style.display = 'none';
+    if (proFlashNote) proFlashNote.style.display = 'none';
+    if (proBtn) proBtn.textContent = 'Start Pro — ' + getCurrencySymbol() + '3.99/mo →';
+  }
 }
 
 function switchTab(screenId, navId) {
@@ -1346,8 +1373,9 @@ function updatePhotoViewer() {
       // Empty slot with + icon and file input
       const thumb = document.createElement('div');
       thumb.className = 'photo-thumb empty';
-      const icon = document.createElement('i');
-      icon.className = 'ti ti-plus';
+      const icon = document.createElement('span');
+      icon.textContent = '+';
+      icon.style.cssText = 'font-size:24px;font-weight:300;color:rgba(255,255,255,.5);pointer-events:none;line-height:1';
       thumb.appendChild(icon);
       const inp = document.createElement('input');
       inp.type = 'file'; inp.accept = 'image/*';
@@ -1854,6 +1882,7 @@ let currentResult = null;
 
 // ── FLASH OFFER ──
 let flashTimerInterval = null;
+let _flashActive = false;
 
 function showFlashOffer() {
   // Only show once per session, only for Rare+ finds, only if not already paid
