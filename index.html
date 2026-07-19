@@ -420,43 +420,75 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .r-hero-dot.active{background:#fff;width:14px;border-radius:3px}
 .rarity-badge-hero{position:absolute;top:14px;left:14px;z-index:5;display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;backdrop-filter:blur(8px)}
 
+
+/* ── SHARE CARD ── */
+.share-generating{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;max-width:430px;margin:0 auto;opacity:0;pointer-events:none;transition:opacity .2s}
+.share-generating.show{opacity:1;pointer-events:all}
+.share-generating-inner{background:var(--bg2);border-radius:20px;padding:24px;text-align:center;border:1px solid var(--border2)}
+.share-generating-inner i{font-size:32px;color:var(--lime);display:block;margin-bottom:12px}
+.share-generating-inner p{font-size:14px;color:var(--text3);font-weight:600}
+
+
+/* ── COLLECTION STATS ── */
+.collection-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.stat-card-val{font-size:22px;font-weight:900;color:var(--lime);letter-spacing:-.5px}
+.stat-card-label{font-size:11px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:.5px}
+.rarity-breakdown{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px}
+.rarity-breakdown-title{font-size:11px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.rarity-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rarity-row:last-child{margin-bottom:0}
+.rarity-dot-sm{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.rarity-row-label{font-size:13px;font-weight:600;color:var(--text2);flex:1}
+.rarity-row-count{font-size:13px;font-weight:800;color:var(--text)}
+.rarity-bar-wrap{flex:2;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.rarity-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.h-rarity-badge{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:100px;margin-top:3px;display:inline-block}
+
+
+/* ── FLASH OFFER ── */
+.flash-offer{position:fixed;inset:0;z-index:85;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;max-width:430px;margin:0 auto}
+.flash-offer.show{pointer-events:all}
+.flash-offer-bg{position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);opacity:0;transition:opacity .25s}
+.flash-offer.show .flash-offer-bg{opacity:1}
+.flash-offer-card{position:relative;z-index:1;background:var(--bg2);border-radius:28px 28px 0 0;padding:28px 22px 44px;width:100%;border:1px solid var(--border2);border-bottom:none;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.2,.64,1)}
+.flash-offer.show .flash-offer-card{transform:translateY(0)}
+.flash-offer-pill{width:36px;height:4px;background:var(--border3);border-radius:2px;margin:0 auto 20px}
+.flash-offer-timer{background:var(--lime-bg);border:1px solid var(--lime-border);border-radius:100px;padding:5px 14px;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--lime);margin-bottom:16px}
+.flash-offer-title{font-size:24px;font-weight:900;letter-spacing:-.5px;margin-bottom:8px;color:var(--text)}
+.flash-offer-sub{font-size:14px;color:var(--text3);line-height:1.6;margin-bottom:20px}
+.flash-offer-price-row{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.flash-offer-old{font-size:18px;color:var(--text4);text-decoration:line-through;font-weight:700}
+.flash-offer-new{font-size:32px;font-weight:900;color:var(--lime);letter-spacing:-1px}
+.flash-offer-save{background:rgba(212,255,60,.15);color:var(--lime);border:1px solid var(--lime-border);border-radius:100px;padding:3px 10px;font-size:11px;font-weight:800}
+.flash-offer-btn{width:100%;padding:17px;border-radius:16px;background:var(--lime);border:none;color:#0d0d0d;font-size:16px;font-weight:800;cursor:pointer;margin-bottom:10px}
+.flash-offer-skip{width:100%;padding:10px;background:none;border:none;color:var(--text4);font-size:13px;cursor:pointer;font-weight:600}
+
 /* ── TOAST ── */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-10px);background:#ff4444;color:#fff;font-size:13px;font-weight:700;padding:11px 20px;border-radius:100px;white-space:nowrap;opacity:0;pointer-events:none;transition:all .25s;z-index:200;display:flex;align-items:center;gap:7px;max-width:90vw}
 .toast i{font-size:15px}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.success{background:var(--lime);color:#0d0d0d}
 </style>
+  <!-- Sentry Error Tracking -->
+  <script
+    src="https://js.sentry-cdn.com/YOUR_SENTRY_DSN.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script>
+    // Replace YOUR_SENTRY_DSN with your actual Sentry DSN from sentry.io
+    // Sentry.init({ dsn: 'https://xxx@xxx.ingest.sentry.io/xxx' });
+    // For now using basic error capture:
+    window.addEventListener('unhandledrejection', function(e) {
+      console.error('Unhandled promise rejection:', e.reason);
+    });
+    window.addEventListener('error', function(e) {
+      console.error('Global error:', e.message, e.filename, e.lineno);
+    });
+  </script>
 </head>
 <body>
 <div id="app">
-
-  <!-- ── ONBOARDING ── -->
-  <div id="onboarding">
-    <div class="onboard-card">
-      <div class="onboard-img-placeholder"><div style="width:64px;height:64px;border-radius:18px;background:#111;display:flex;align-items:center;justify-content:center;border:2px solid #2a2a2a"><svg width="28" height="32" viewBox="0 0 16 18" fill="none"><path d="M9.5 1L2 10.5H8L6.5 17L14 7.5H8L9.5 1Z" fill="#d4ff3c" stroke="#d4ff3c" stroke-width="0.5" stroke-linejoin="round"/></svg></div></div>
-      <div class="onboard-body">
-        <div class="onboard-pill"></div>
-        <div class="onboard-title">Know what anything's worth — instantly.</div>
-        <div class="onboard-sub">Snap a photo of any item and get a real resale price in seconds. No guessing, no research.</div>
-        <div class="onboard-steps">
-          <div class="onboard-step">
-            <div class="onboard-step-num">1</div>
-            <div class="onboard-step-text">Take or upload a photo of your item</div>
-          </div>
-          <div class="onboard-step">
-            <div class="onboard-step-num">2</div>
-            <div class="onboard-step-text">AI analyzes condition & searches sold listings</div>
-          </div>
-          <div class="onboard-step">
-            <div class="onboard-step-num">3</div>
-            <div class="onboard-step-text">Get a price + ready-to-post description</div>
-          </div>
-        </div>
-        <button class="onboard-btn" onclick="localStorage.setItem('qs_onboarded','1');document.getElementById('onboarding').style.display='none'" style="position:relative;z-index:200;pointer-events:all">Let's go →</button>
-      </div>
-    </div>
-  </div>
-
   <!-- ── SCAN ── -->
   <div class="scr" id="scrScan">
     <div class="app-header">
@@ -475,7 +507,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
       </div>
       <div class="app-title">What's it<br>worth?</div>
       <div class="app-sub">Snap up to 3 photos, get an instant estimate</div>
-      <div class="value-counter-card" id="valueCounterCard">
+      <div class="value-counter-card" id="valueCounterCard" style="display:none">
         <div class="value-counter-left">
           <div class="value-counter-label">Total discovered</div>
           <div class="value-counter-num" id="totalValueDisplay">$0</div>
@@ -551,9 +583,11 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
   <!-- ── HISTORY ── -->
   <div class="scr hidden" id="scrHistory">
     <div class="screen-hd">
-      <div class="screen-hd-title">History</div>
+      <div class="screen-hd-title">Collection</div>
       <button onclick="clearHistory()" style="background:none;border:none;font-size:13px;font-weight:700;color:var(--text4);cursor:pointer;padding:4px 0" id="clearHistBtn">Clear all</button>
     </div>
+    <div class="collection-stats" id="collectionStats"></div>
+    <div class="rarity-breakdown" id="rarityBreakdown" style="display:none"></div>
     <div id="histList"></div>
   </div>
 
@@ -665,7 +699,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
       <i class="ti ti-camera"></i>Scan
     </button>
     <button class="nav-btn" id="navHistory" onclick="switchTab('scrHistory','navHistory')">
-      <i class="ti ti-history"></i>History
+      <i class="ti ti-trophy"></i>Collection
     </button>
     <button class="nav-btn" id="navSettings" onclick="switchTab('scrSettings','navSettings')">
       <i class="ti ti-settings"></i>Settings
@@ -703,6 +737,32 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
   </div>
 </div>
 
+
+  <!-- ── SHARE GENERATING ── -->
+  <div class="share-generating" id="shareGenerating">
+    <div class="share-generating-inner">
+      <i class="ti ti-loader-2" style="animation:spin .8s linear infinite"></i>
+      <p>Creating share card...</p>
+    </div>
+  </div>
+
+<!-- ── FLASH OFFER ── -->
+<div class="flash-offer" id="flashOffer">
+  <div class="flash-offer-bg" onclick="closeFlashOffer()"></div>
+  <div class="flash-offer-card">
+    <div class="flash-offer-pill"></div>
+    <div class="flash-offer-timer"><i class="ti ti-clock"></i> Limited offer · <span id="flashTimer">10:00</span></div>
+    <div class="flash-offer-title">You found something valuable! 🎯</div>
+    <div class="flash-offer-sub">Unlock unlimited scans and never miss a great find. First week almost free.</div>
+    <div class="flash-offer-price-row">
+      <div class="flash-offer-old">$4.99/mo</div>
+      <div class="flash-offer-new">$0.99</div>
+      <div class="flash-offer-save">SAVE 80%</div>
+    </div>
+    <button class="flash-offer-btn" onclick="closeFlashOffer(); showScreen('scrCredits')">Unlock unlimited scans →</button>
+    <button class="flash-offer-skip" onclick="closeFlashOffer()">Maybe later</button>
+  </div>
+</div>
 <!-- ── PAYWALL ── -->
 <div class="paywall-overlay" id="paywallOverlay">
   <div class="paywall-bg" onclick="closePaywall()"></div>
@@ -720,9 +780,85 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 
 <script>
 // ── CREDITS SYSTEM ──
-const KEYS = { credits: 'quicksell_credits', freeScans: 'quicksell_free', history: 'quicksell_history', lastFreeDate: 'quicksell_free_date', totalValue: 'quicksell_total_value', streak: 'quicksell_streak', lastScanDate: 'quicksell_last_scan_date' };
+const KEYS = { credits: 'quicksell_credits', freeScans: 'quicksell_free', history: 'quicksell_history', lastFreeDate: 'quicksell_free_date', totalValue: 'quicksell_total_value', streak: 'quicksell_streak', lastScanDate: 'quicksell_last_scan_date', deviceId: 'qs_device_id' };
 const FREE_TOTAL = 2; // daily, not lifetime
 const COST_PER_SCAN = 5;
+// App secret for HMAC signing — must match APP_SECRET in Cloudflare Worker secrets
+const APP_SECRET = 'qs-app-v1-secret-2024'; // change this to match your Worker secret
+
+// ── DEVICE ID ──
+function getDeviceId() {
+  let id = localStorage.getItem(KEYS.deviceId);
+  if (!id) {
+    id = 'qs-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem(KEYS.deviceId, id);
+  }
+  return id;
+}
+
+// ── HMAC SIGNING ──
+async function signRequest(deviceId, timestamp) {
+  try {
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw', encoder.encode(APP_SECRET),
+      { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+    );
+    const msg = `${deviceId}:${timestamp}`;
+    const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(msg));
+    return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2,'0')).join('');
+  } catch { return ''; }
+}
+
+async function getAuthHeaders() {
+  const deviceId = getDeviceId();
+  const timestamp = String(Math.floor(Date.now() / 1000));
+  const signature = await signRequest(deviceId, timestamp);
+  return { 'X-Device-ID': deviceId, 'X-Timestamp': timestamp, 'X-Signature': signature };
+}
+
+// ── KV BALANCE SYNC ──
+let _kvSynced = false;
+async function syncBalanceFromKV() {
+  if (_kvSynced) return;
+  try {
+    const headers = await getAuthHeaders();
+    const res = await fetch(QUICKSELL_API_URL + '/balance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...headers },
+      body: JSON.stringify({ action: 'get' })
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.ok && data.balance) {
+      const bal = data.balance;
+      const today = new Date().toISOString().slice(0,10);
+      // Sync credits from KV (server is source of truth for paid credits)
+      if (bal.credits !== undefined) {
+        localStorage.setItem(KEYS.credits, String(bal.credits));
+      }
+      // Sync free scans used today
+      if (bal.freeDate === today && bal.freeUsedToday !== undefined) {
+        localStorage.setItem(KEYS.freeScans, String(bal.freeUsedToday));
+        localStorage.setItem(KEYS.lastFreeDate, today);
+      }
+      _kvSynced = true;
+      refreshUI();
+    }
+  } catch {}
+}
+
+async function pushBalanceToKV(credits, freeUsedToday) {
+  try {
+    const headers = await getAuthHeaders();
+    const today = new Date().toISOString().slice(0,10);
+    await fetch(QUICKSELL_API_URL + '/balance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...headers },
+      body: JSON.stringify({ action: 'set', balance: { credits, freeUsedToday, freeDate: today } })
+    });
+  } catch {}
+}
 const PACKS = {
   starter: { credits: 50, bonus: 10, price: 2.99 },
   value:   { credits: 150, bonus: 20, price: 6.99 },
@@ -750,11 +886,18 @@ function consumeScan() {
   const free = getFreeLeft();
   if (free > 0) {
     const used = parseInt(localStorage.getItem(KEYS.freeScans) || '0', 10);
-    localStorage.setItem(KEYS.freeScans, String(used + 1));
+    const newUsed = used + 1;
+    localStorage.setItem(KEYS.freeScans, String(newUsed));
+    pushBalanceToKV(getCredits(), newUsed); // sync to KV
     refreshUI(); return true;
   }
   const c = getCredits();
-  if (c >= COST_PER_SCAN) { setCredits(c - COST_PER_SCAN); return true; }
+  if (c >= COST_PER_SCAN) {
+    const newCredits = c - COST_PER_SCAN;
+    setCredits(newCredits);
+    pushBalanceToKV(newCredits, parseInt(localStorage.getItem(KEYS.freeScans) || '0'));
+    return true;
+  }
   return false;
 }
 
@@ -827,9 +970,11 @@ function refreshUI() {
 
   // Total value + streak
   const totalEl = document.getElementById('totalValueDisplay');
+  const counterCard = document.getElementById('valueCounterCard');
   if (totalEl) {
     const total = getTotalValue();
     totalEl.textContent = formatPrice(Math.round(total));
+    if (counterCard) counterCard.style.display = total > 0 ? 'flex' : 'none';
   }
   const streak = getStreak();
   const streakPill = document.getElementById('streakPill');
@@ -844,13 +989,22 @@ function refreshUI() {
   }
 }
 
+const RARITY_COLORS_HEX = {
+  trash:'#999', common:'#aaa', uncommon:'#22c55e',
+  rare:'#3b82f6', epic:'#a855f7', legendary:'#fbbf24'
+};
+
 function historyRowHTML(item) {
+  const rarity = item.rarity || 'common';
+  const rarityColor = RARITY_COLORS_HEX[rarity] || '#aaa';
+  const rarityLabel = RARITY_LABELS[rarity] || rarity;
   return `
-    <div class="h-item">
+    <div class="h-item" style="border-left:3px solid ${rarityColor}">
       <div class="h-item-inner">
         <img class="h-thumb" src="${item.img || ''}" onerror="this.style.background='var(--bg3)'" alt="">
         <div class="h-body">
           <div class="h-name">${item.name}</div>
+          <span class="h-rarity-badge" style="background:${rarityColor}22;color:${rarityColor};border:1px solid ${rarityColor}44">${rarityLabel}</span>
           <div class="h-meta">${item.date}</div>
         </div>
         <div class="h-right">
@@ -865,10 +1019,59 @@ function renderHistoryList() {
   const el = document.getElementById('histList');
   if (!el) return;
   const h = getHistory();
+
   if (!h.length) {
     el.innerHTML = `<div class="h-empty"><i class="ti ti-camera-off"></i><div class="h-empty-title">No scans yet</div><div class="h-empty-sub">Snap something and see<br>what it's worth.</div></div>`;
+    document.getElementById('collectionStats').innerHTML = '';
+    document.getElementById('rarityBreakdown').style.display = 'none';
     return;
   }
+
+  // Stats
+  const totalScans = h.length;
+  const totalValue = h.reduce((sum, i) => sum + (i.sweetSpot || 0), 0);
+  const bestFind = h.reduce((best, i) => (i.sweetSpot || 0) > (best.sweetSpot || 0) ? i : best, h[0]);
+  const rareCounts = h.reduce((acc, i) => { acc[i.rarity || 'common'] = (acc[i.rarity || 'common'] || 0) + 1; return acc; }, {});
+  const legendaryCount = (rareCounts.legendary || 0) + (rareCounts.epic || 0) + (rareCounts.rare || 0);
+
+  const statsEl = document.getElementById('collectionStats');
+  if (statsEl) statsEl.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-card-val">${totalScans}</div>
+      <div class="stat-card-label">Total scans</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val">${formatPrice(Math.round(totalValue))}</div>
+      <div class="stat-card-label">Value discovered</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val">${legendaryCount}</div>
+      <div class="stat-card-label">Rare+ finds</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val">${formatPrice(bestFind.sweetSpot || 0)}</div>
+      <div class="stat-card-label">Best find</div>
+    </div>`;
+
+  // Rarity breakdown
+  const rarityOrder = ['legendary','epic','rare','uncommon','common','trash'];
+  const breakdownEl = document.getElementById('rarityBreakdown');
+  if (breakdownEl) {
+    breakdownEl.style.display = 'block';
+    breakdownEl.innerHTML = `<div class="rarity-breakdown-title">Rarity breakdown</div>` +
+      rarityOrder.filter(r => rareCounts[r]).map(r => {
+        const count = rareCounts[r] || 0;
+        const pct = Math.round(count / totalScans * 100);
+        const color = RARITY_COLORS_HEX[r] || '#aaa';
+        return `<div class="rarity-row">
+          <div class="rarity-dot-sm" style="background:${color}"></div>
+          <div class="rarity-row-label">${RARITY_LABELS[r] || r}</div>
+          <div class="rarity-bar-wrap"><div class="rarity-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+          <div class="rarity-row-count">${count}</div>
+        </div>`;
+      }).join('');
+  }
+
   el.innerHTML = h.map(historyRowHTML).join('');
 }
 
@@ -941,13 +1144,17 @@ function openPaywall() { document.getElementById('paywallOverlay').classList.add
 // Migrate from old lifetime credits to daily system
 (function migrateDailyScans() {
   if (!localStorage.getItem(KEYS.lastFreeDate)) {
-    localStorage.removeItem(KEYS.freeScans); // clear old used count
+    localStorage.removeItem(KEYS.freeScans);
     localStorage.setItem(KEYS.lastFreeDate, new Date().toISOString().slice(0,10));
     localStorage.setItem(KEYS.freeScans, '0');
   }
 })();
 
-document.addEventListener('DOMContentLoaded', refreshUI);
+document.addEventListener('DOMContentLoaded', () => {
+  refreshUI();
+  // Sync balance from KV on startup (non-blocking)
+  setTimeout(() => syncBalanceFromKV(), 500);
+});
 
 // Android back button — return to scan instead of exiting
 history.pushState(null, '', window.location.href);
@@ -1049,18 +1256,7 @@ function toggleTheme() {
 }
 
 // ── ONBOARDING ──
-function dismissOnboarding() {
-  try {
-    localStorage.setItem('qs_onboarded', '1');
-  } catch(e) {}
-  const ob = document.getElementById('onboarding');
-  if (ob) { ob.style.display = 'none'; ob.classList.add('hidden'); }
-}
-function initOnboarding() {
-  if (localStorage.getItem('qs_onboarded')) {
-    document.getElementById('onboarding').classList.add('hidden');
-  }
-}
+
 
 // ── MULTI PHOTO ──
 const MAX_PHOTOS = 3;
@@ -1468,17 +1664,28 @@ Rules for pricing:
 
   try {
     const [response] = await Promise.all([
-      fetch(QUICKSELL_API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          max_tokens: 1500,
-          messages: [{ role: 'user', content: imageContents }]
-        })
-      }),
+      (async () => {
+        const authHeaders = await getAuthHeaders();
+        return fetch(QUICKSELL_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...authHeaders },
+          body: JSON.stringify({
+            max_tokens: 1500,
+            messages: [{ role: 'user', content: imageContents }]
+          })
+        });
+      })(),
       runLoadingAnimation()
     ]);
 
+    if (response.status === 402) {
+      hideLoadingScreen();
+      document.querySelectorAll('.scr').forEach(s => s.classList.add('hidden'));
+      document.getElementById('scrScan').classList.remove('hidden');
+      document.getElementById('scanBtn').disabled = false;
+      showPaywall();
+      return;
+    }
     if (!response.ok) throw new Error(`Server error ${response.status}`);
     const data = await response.json();
     if (data.error) throw new Error(data.error);
@@ -1506,6 +1713,8 @@ Rules for pricing:
       range: `${formatPrice(result.price_low)}–${formatPrice(result.price_high)}`,
       img: thumbUrl,
       date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      rarity: result._rarity || 'common',
+      sweetSpot: result.sweet_spot,
     });
 
     setProgress(1);
@@ -1608,6 +1817,37 @@ function renderChart(trend, months) {
 
 // ── RESULT SCREEN ──
 let currentResult = null;
+
+
+// ── FLASH OFFER ──
+let flashTimerInterval = null;
+
+function showFlashOffer() {
+  // Only show once per session, only for Rare+ finds, only if not already paid
+  if (sessionStorage.getItem('qs_flash_shown')) return;
+  if (getCredits() > 50) return; // already bought scans
+  sessionStorage.setItem('qs_flash_shown', '1');
+
+  const offer = document.getElementById('flashOffer');
+  if (!offer) return;
+  offer.classList.add('show');
+
+  // 10 minute countdown
+  let seconds = 600;
+  const timerEl = document.getElementById('flashTimer');
+  flashTimerInterval = setInterval(() => {
+    seconds--;
+    if (seconds <= 0) { clearInterval(flashTimerInterval); closeFlashOffer(); return; }
+    const m = Math.floor(seconds / 60), s = seconds % 60;
+    if (timerEl) timerEl.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+}
+
+function closeFlashOffer() {
+  const offer = document.getElementById('flashOffer');
+  if (offer) offer.classList.remove('show');
+  if (flashTimerInterval) { clearInterval(flashTimerInterval); flashTimerInterval = null; }
+}
 
 // ── RARITY SYSTEM ──
 function calcRarity(sweetSpotUsd) {
@@ -1819,17 +2059,23 @@ function showResultScreen(r) {
         </div>
       </div>
     </div>
-    <button class="rescan-btn" onclick="resetScan()">
-      <i class="ti ti-refresh"></i> Price another item
-    </button>`;
+    <div style="background:var(--lime-bg);border:1px solid var(--lime-border);border-radius:16px;padding:16px;margin-top:2px;cursor:pointer" onclick="resetScan()">
+      <div style="font-size:13px;font-weight:700;color:var(--lime);margin-bottom:4px">💡 Most people find €200+ they didn't know about</div>
+      <div style="font-size:12px;color:var(--text4);margin-bottom:12px">What else is hiding in your house?</div>
+      <button class="rescan-btn" style="margin-top:0;background:var(--lime);color:#0d0d0d;border:none;font-weight:800">
+        <i class="ti ti-bolt"></i> Scan another item
+      </button>
+    </div>`;
 
   // Reveal effects based on rarity
   const heroCard = document.getElementById('heroCard');
   if (heroCard) heroCard.classList.add('rarity-reveal-flash');
   if (rarity === 'legendary') {
     setTimeout(() => triggerConfetti('jackpot'), 150);
+    setTimeout(() => showFlashOffer(), 3000);
   } else if (rarity === 'epic' || rarity === 'rare') {
     setTimeout(() => triggerConfetti('big'), 150);
+    setTimeout(() => showFlashOffer(), 2500);
   } else if (rarity === 'uncommon') {
     setTimeout(() => triggerConfetti('small'), 150);
   } else if (navigator.vibrate) {
@@ -1879,17 +2125,168 @@ function showResultScreen(r) {
 
 // ── SHARE ──
 async function shareReport() {
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: `${currentResult.item_name} — $${currentResult.price_low}–$${currentResult.price_high}`,
-        text: `Just priced my ${currentResult.item_name} on QuickSell — worth $${currentResult.sweet_spot}. ${currentResult.listing_description}`,
-      });
-    } catch {}
-  } else {
-    navigator.clipboard.writeText(`${currentResult.item_name}: $${currentResult.price_low}–$${currentResult.price_high}\n\n${currentResult.listing_description}`)
-      .then(() => showToast('Report copied to clipboard', 'success'));
+  const gen = document.getElementById('shareGenerating');
+  if (gen) gen.classList.add('show');
+
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080; canvas.height = 1080;
+    const ctx = canvas.getContext('2d');
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    const bg = isDark ? '#0d0d0d' : '#f5f5f0';
+    const cardBg = isDark ? '#141414' : '#ffffff';
+    const textColor = isDark ? '#ffffff' : '#111111';
+    const subColor = isDark ? '#888888' : '#666666';
+    const lime = isDark ? '#d4ff3c' : '#5a9900';
+    const rarity = currentResult._rarity || 'common';
+    const rarityColors = {
+      trash:'#999', common:'#ccc', uncommon:'#22c55e',
+      rare:'#3b82f6', epic:'#a855f7', legendary:'#fbbf24'
+    };
+    const rarityColor = rarityColors[rarity] || '#ccc';
+
+    // Background
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, 1080, 1080);
+
+    // Card
+    ctx.fillStyle = cardBg;
+    roundRect(ctx, 60, 60, 960, 960, 40);
+    ctx.fill();
+
+    // Photo
+    if (photos[0]) {
+      const img = new Image();
+      await new Promise(res => { img.onload = res; img.onerror = res; img.src = photos[0].dataUrl; });
+      ctx.save();
+      roundRect(ctx, 60, 60, 960, 520, 40, true);
+      ctx.clip();
+      // cover fit
+      const ir = img.width / img.height;
+      const cr = 960 / 520;
+      let sx=0, sy=0, sw=img.width, sh=img.height;
+      if (ir > cr) { sw = img.height * cr; sx = (img.width - sw) / 2; }
+      else { sh = img.width / cr; sy = (img.height - sh) / 2; }
+      ctx.drawImage(img, sx, sy, sw, sh, 60, 60, 960, 520);
+      // gradient overlay
+      const grad = ctx.createLinearGradient(0, 400, 0, 580);
+      grad.addColorStop(0, 'rgba(0,0,0,0)');
+      grad.addColorStop(1, 'rgba(0,0,0,0.85)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(60, 60, 960, 520);
+      ctx.restore();
+    }
+
+    // Rarity badge
+    ctx.fillStyle = rarityColor + '33';
+    roundRect(ctx, 90, 90, 200, 52, 26);
+    ctx.fill();
+    ctx.fillStyle = rarityColor;
+    ctx.font = 'bold 22px system-ui, sans-serif';
+    ctx.fillText((currentResult._rarity || 'common').toUpperCase() + ' FIND', 110, 122);
+
+    // Item name
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 52px system-ui, sans-serif';
+    const name = currentResult.item_name;
+    const words = name.split(' ');
+    let line = '', lines = [], y = 490;
+    for (const w of words) {
+      const test = line + w + ' ';
+      if (ctx.measureText(test).width > 880 && line) { lines.push(line.trim()); line = w + ' '; }
+      else line = test;
+    }
+    if (line) lines.push(line.trim());
+    lines.slice(0,2).reverse().forEach((l, i) => {
+      ctx.fillText(l, 90, y - i * 58);
+    });
+
+    // Price
+    ctx.fillStyle = lime;
+    ctx.font = 'bold 96px system-ui, sans-serif';
+    ctx.fillText(formatPrice(currentResult.price_high) + ' – ' + formatPrice(currentResult.price_low), 90, 680);
+
+    // Condition
+    ctx.fillStyle = subColor;
+    ctx.font = '32px system-ui, sans-serif';
+    ctx.fillText('Condition: ' + currentResult.condition, 90, 740);
+
+    // Divider
+    ctx.fillStyle = isDark ? '#1e1e1e' : '#e8e8e8';
+    ctx.fillRect(90, 770, 900, 2);
+
+    // QuickSell branding
+    ctx.fillStyle = lime;
+    ctx.font = 'bold 36px system-ui, sans-serif';
+    ctx.fillText('⚡ QuickSell', 90, 840);
+    ctx.fillStyle = subColor;
+    ctx.font = '28px system-ui, sans-serif';
+    ctx.fillText('AI Resale Price Estimator', 90, 885);
+
+    // QR-like hint
+    ctx.fillStyle = subColor;
+    ctx.font = '24px system-ui, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('quicksell-topaz-eta.vercel.app', 990, 985);
+    ctx.textAlign = 'left';
+
+    // Convert to blob and share
+    canvas.toBlob(async (blob) => {
+      if (gen) gen.classList.remove('show');
+      const file = new File([blob], 'quicksell-find.png', { type: 'image/png' });
+      const shareData = {
+        files: [file],
+        text: `I found a ${(currentResult._rarity || 'great').toUpperCase()} item worth ${formatPrice(currentResult.sweet_spot)} with QuickSell! 🔍`,
+      };
+      // Try native share with file (works on Android + iOS 15+)
+      try {
+        if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+          return;
+        }
+      } catch(e) {
+        if (e.name !== 'AbortError') {
+          // Share failed — fall through to download
+        } else {
+          return; // User cancelled
+        }
+      }
+      // iOS fallback: open image in new tab (user can long-press save)
+      const url = URL.createObjectURL(blob);
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        window.open(url, '_blank');
+        showToast('Long-press image to save & share', 'success');
+      } else {
+        // Desktop/Android fallback: download
+        const a = document.createElement('a');
+        a.href = url; a.download = 'quicksell-find.png'; a.click();
+        URL.revokeObjectURL(url);
+        showToast('Share card saved!', 'success');
+      }
+    }, 'image/png', 0.92);
+
+  } catch(err) {
+    if (gen) gen.classList.remove('show');
+    // Fallback to text share
+    if (navigator.share) {
+      navigator.share({ text: `${currentResult.item_name}: ${formatPrice(currentResult.price_low)}–${formatPrice(currentResult.price_high)}\n\n${currentResult.listing_description}` });
+    }
   }
+}
+
+function roundRect(ctx, x, y, w, h, r, clip=false) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+  if (clip) ctx.clip();
 }
 
 // ── REGEN ──
@@ -1961,7 +2358,6 @@ function showToast(msg, type = 'error') {
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
-  initOnboarding();
   updatePhotoViewer();
   detectRegion();
 });
