@@ -472,18 +472,15 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 </style>
   <!-- Sentry Error Tracking -->
   <script
-    src="https://js.sentry-cdn.com/YOUR_SENTRY_DSN.min.js"
+    src="https://browser.sentry-cdn.com/7.99.0/bundle.min.js"
     crossorigin="anonymous"
   ></script>
   <script>
-    // Replace YOUR_SENTRY_DSN with your actual Sentry DSN from sentry.io
-    // Sentry.init({ dsn: 'https://xxx@xxx.ingest.sentry.io/xxx' });
-    // For now using basic error capture:
-    window.addEventListener('unhandledrejection', function(e) {
-      console.error('Unhandled promise rejection:', e.reason);
-    });
-    window.addEventListener('error', function(e) {
-      console.error('Global error:', e.message, e.filename, e.lineno);
+    Sentry.init({
+      dsn: 'https://52e283b2d567b49c6cd8bb5d1c528554@o4511761508859904.ingest.de.sentry.io/4511761521967184',
+      environment: 'production',
+      release: 'quicksell@1.0.0',
+      tracesSampleRate: 0.2,
     });
   </script>
 </head>
