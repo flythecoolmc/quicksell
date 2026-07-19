@@ -42,7 +42,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 
 /* ── SCREENS ── */
 .scr{flex:1;overflow-y:auto;padding:18px 18px 110px;scrollbar-width:none;min-height:0;width:100%;animation:fadeUp .35s ease both}
-#scrScan{padding-bottom:14px;overflow:hidden;display:flex;flex-direction:column}
+#scrScan{padding-bottom:14px;overflow:hidden;display:flex;flex-direction:column;min-height:0}
 .scr::-webkit-scrollbar{display:none}
 .scr.hidden{display:none !important}
 
@@ -68,7 +68,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .app-sub{font-size:14px;color:var(--text4);margin-top:7px}
 
 /* ── MULTI PHOTO ── */
-.photo-grid{position:relative;margin-top:14px;animation:fadeUp .4s .05s ease both;flex:1;min-height:0;display:flex;flex-direction:column}
+.photo-grid{position:relative;margin-top:10px;animation:fadeUp .4s .05s ease both;flex:1;min-height:120px;display:flex;flex-direction:column}
 .photo-main{position:relative;flex:1;min-height:200px;border-radius:18px;overflow:hidden;background:var(--bg2);border:1.5px dashed var(--border3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s}
 .photo-main:hover{border-color:var(--lime)}
 .photo-main.filled{border-style:solid;border-color:var(--border2)}
@@ -97,7 +97,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .photo-count{font-size:12px;color:var(--text4);margin-top:6px}
 .photo-count strong{color:var(--lime)}
 
-.scan-btn{width:100%;padding:17px;border-radius:16px;background:var(--lime);border:none;color:#0d0d0d;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s,filter .15s;letter-spacing:-.2px;margin-top:14px;animation:fadeUp .4s .1s ease both}
+.scan-btn{width:100%;flex-shrink:0;padding:17px;border-radius:16px;background:var(--lime);border:none;color:#0d0d0d;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s,filter .15s;letter-spacing:-.2px;margin-top:14px;animation:fadeUp .4s .1s ease both}
 .scan-btn:hover{filter:brightness(1.08)}
 .scan-btn:active{transform:scale(.98)}
 .scan-btn:disabled{background:var(--bg3);color:var(--text5);cursor:not-allowed;transform:none;filter:none}
@@ -504,15 +504,12 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
       </div>
       <div class="app-title">What's it<br>worth?</div>
       <div class="app-sub">Snap up to 3 photos, get an instant estimate</div>
-      <div class="value-counter-card" id="valueCounterCard" style="display:none">
-        <div class="value-counter-left">
-          <div class="value-counter-label">Total discovered</div>
-          <div class="value-counter-num" id="totalValueDisplay">$0</div>
-        </div>
-        <div class="streak-pill" id="streakPill" style="display:none">
-          <i class="ti ti-flame"></i>
-          <span id="streakCount">0</span>
-        </div>
+      <div id="valueCounterCard" style="display:none;margin-top:4px;text-align:right">
+        <span style="font-size:10px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:.5px">Discovered </span>
+        <span id="totalValueDisplay" style="font-size:13px;font-weight:900;color:var(--lime)">$0</span>
+        <span id="streakPill" style="display:none;margin-left:8px;font-size:12px;font-weight:800;color:#f97316">
+          🔥<span id="streakCount">0</span>
+        </span>
       </div>
     </div>
 
@@ -520,9 +517,11 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
       <div class="photo-main" id="photoMain" onclick="mainPhotoClick()">
         <img class="photo-main-img" id="photoMainImg" alt="">
         <div class="photo-main-placeholder" id="photoMainPlaceholder">
-          <div class="photo-slot-main-icon"><i class="ti ti-camera"></i></div>
-          <div class="upload-main-label">Take or upload a photo</div>
-          <div class="upload-main-sub">Any item, any condition</div>
+          <div class="photo-slot-main-icon" style="animation:curiosityPulse 2s ease infinite">
+            <span style="font-size:36px">📸</span>
+          </div>
+          <div class="upload-main-label">Tap to scan any item</div>
+          <div class="upload-main-sub">Get an instant price estimate</div>
         </div>
         <button class="photo-delete-main" id="photoDeleteMain" onclick="event.stopPropagation();deleteMainPhoto()">&#x2715;</button>
         <button class="photo-arrow photo-arrow-left" id="arrowLeft" onclick="event.stopPropagation();slidePhoto(-1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
@@ -592,17 +591,39 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
   <div class="scr hidden" id="scrCredits">
     <div class="screen-hd">
       <div class="back-link" onclick="showScreen('scrScan')"><i class="ti ti-arrow-left"></i> Back</div>
-      <div class="screen-hd-title">Scans</div>
+      <div class="screen-hd-title">Get Scans</div>
       <div style="width:48px"></div>
     </div>
-    <div class="balance-card">
-      <div class="balance-eyebrow">Your balance</div>
-      <div class="balance-num" id="balanceLarge">—</div>
-      <div class="balance-unit">scans</div>
-      <div class="balance-sub">Resets daily · top up for more</div>
+
+    <!-- Balance pill -->
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border2);border-radius:100px;padding:10px 20px">
+        <span style="font-size:20px">⚡</span>
+        <span id="balanceLarge" style="font-size:22px;font-weight:900;color:var(--lime)">—</span>
+        <span style="font-size:14px;font-weight:600;color:var(--text4)">scans left</span>
+      </div>
+      <div class="free-banner" id="freeBanner" style="margin-top:8px;font-size:12px;color:var(--text4)">
+        <strong id="freeLeft" style="color:var(--lime)">—</strong> free today · resets at midnight
+      </div>
     </div>
-    <div class="free-banner" id="freeBanner">You have <strong id="freeLeft">—</strong> free scans today</div>
-    <span class="section-title">Buy scans</span>
+
+    <!-- Pro subscription card -->
+    <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(212,255,60,.3);border-radius:20px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,rgba(212,255,60,.15),transparent);border-radius:50%"></div>
+      <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--lime);margin-bottom:6px">⭐ Most Popular</div>
+      <div style="font-size:20px;font-weight:900;color:#fff;margin-bottom:4px">QuickSell Pro</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px;line-height:1.5">Unlimited scans · Price alerts · No ads · Pro badge</div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:16px">
+        <span style="font-size:32px;font-weight:900;color:var(--lime)">€3.99</span>
+        <span style="font-size:14px;color:rgba(255,255,255,.5)">/month</span>
+        <span style="font-size:11px;font-weight:700;background:rgba(212,255,60,.15);color:var(--lime);border:1px solid rgba(212,255,60,.3);border-radius:100px;padding:2px 8px">BEST VALUE</span>
+      </div>
+      <button onclick="buyPack('pro')" style="width:100%;padding:14px;background:var(--lime);border:none;border-radius:14px;font-size:15px;font-weight:800;color:#0d0d0d;cursor:pointer">Start Pro — €3.99/mo →</button>
+      <div style="text-align:center;margin-top:8px;font-size:11px;color:rgba(255,255,255,.35)">Cancel anytime</div>
+    </div>
+
+    <!-- One-time packs -->
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text4);margin-bottom:10px">Or buy one-time scans</div>
     <div class="packs">
       <div class="pack" onclick="buyPack('starter')">
         <div class="pack-top"><div class="pack-name">Starter</div><div class="pack-price" id="price-starter"></div></div>
@@ -621,8 +642,13 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
         <div class="pack-per" id="per-power"></div>
       </div>
     </div>
-    <span class="section-title">Scan history</span>
-    <div id="creditHistList"></div>
+
+    <!-- Social proof -->
+    <div style="text-align:center;margin-top:16px;padding:14px;background:var(--bg2);border-radius:14px;border:1px solid var(--border)">
+      <div style="font-size:12px;color:var(--text4);margin-bottom:4px">People using QuickSell have found</div>
+      <div style="font-size:20px;font-weight:900;color:var(--text)">€2.4M+ in hidden value</div>
+      <div style="font-size:11px;color:var(--text4);margin-top:2px">across 180,000+ scans</div>
+    </div>
   </div>
 
   <!-- ── NAV ── -->
@@ -693,13 +719,13 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 
   <nav class="nav" id="mainNav">
     <button class="nav-btn active" id="navScan" onclick="switchTab('scrScan','navScan')">
-      <i class="ti ti-camera"></i>Scan
+      <span style="font-size:18px;line-height:1">🔍</span>Scan
     </button>
     <button class="nav-btn" id="navHistory" onclick="switchTab('scrHistory','navHistory')">
-      <i class="ti ti-trophy"></i>Collection
+      <span style="font-size:18px;line-height:1">💎</span>Collection
     </button>
     <button class="nav-btn" id="navSettings" onclick="switchTab('scrSettings','navSettings')">
-      <i class="ti ti-settings"></i>Settings
+      <span style="font-size:18px;line-height:1">⚙️</span>Settings
     </button>
   </nav>
 
@@ -717,17 +743,15 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
   <div class="source-picker-card">
     <div class="source-picker-pill"></div>
     <button class="source-picker-btn" onclick="pickCamera()">
-      <i class="ti ti-camera"></i>
+      <span style="font-size:24px">📷</span>
       <div class="source-picker-btn-text">
         <div class="source-picker-btn-label">Take a photo</div>
-        <div class="source-picker-btn-sub">Use your camera</div>
       </div>
     </button>
     <button class="source-picker-btn" onclick="pickGallery()">
-      <i class="ti ti-photo"></i>
+      <span style="font-size:24px">🖼️</span>
       <div class="source-picker-btn-text">
         <div class="source-picker-btn-label">Choose from gallery</div>
-        <div class="source-picker-btn-sub">Select existing photo</div>
       </div>
     </button>
     <button class="source-picker-cancel" onclick="hideSourcePicker()">Cancel</button>
@@ -751,12 +775,16 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
     <div class="flash-offer-timer"><i class="ti ti-clock"></i> Limited offer · <span id="flashTimer">10:00</span></div>
     <div class="flash-offer-title">You found something valuable! 🎯</div>
     <div class="flash-offer-sub">Unlock unlimited scans and never miss a great find. First week almost free.</div>
-    <div class="flash-offer-price-row">
-      <div class="flash-offer-old">$4.99/mo</div>
-      <div class="flash-offer-new">$0.99</div>
-      <div class="flash-offer-save">SAVE 80%</div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:13px;color:var(--text3);margin-bottom:8px">QuickSell Pro — first week only:</div>
+      <div class="flash-offer-price-row">
+        <div class="flash-offer-old">€3.99/mo</div>
+        <div class="flash-offer-new">€0.99</div>
+        <div class="flash-offer-save">SAVE 75%</div>
+      </div>
+      <div style="font-size:11px;color:var(--text4)">Then €3.99/mo · Cancel anytime</div>
     </div>
-    <button class="flash-offer-btn" onclick="closeFlashOffer(); showScreen('scrCredits')">Unlock unlimited scans →</button>
+    <button class="flash-offer-btn" onclick="closeFlashOffer(); showScreen('scrCredits')">Start Pro for €0.99 →</button>
     <button class="flash-offer-skip" onclick="closeFlashOffer()">Maybe later</button>
   </div>
 </div>
@@ -977,8 +1005,8 @@ function refreshUI() {
   const streakPill = document.getElementById('streakPill');
   const streakCount = document.getElementById('streakCount');
   if (streakPill && streakCount) {
-    if (streak > 0) {
-      streakPill.style.display = 'flex';
+    if (streak > 1) { // only show streak if > 1 day
+      streakPill.style.display = 'inline';
       streakCount.textContent = streak;
     } else {
       streakPill.style.display = 'none';
@@ -1587,6 +1615,11 @@ const QUICKSELL_API_URL = 'https://quicksell-api.flythecoolmc.workers.dev';
 // ── ANALYZE ──
 async function analyzeImage() {
   if (!photos[0]) return;
+  // Check BEFORE showing loading screen
+  if (!canScan()) {
+    showPaywall();
+    return;
+  }
   document.getElementById('scanBtn').disabled = true;
   showLoadingScreen();
   resetProgress();
@@ -1705,12 +1738,15 @@ Rules for pricing:
       tc.getContext('2d').drawImage(ti, 0, 0, 80, 80);
       thumbUrl = tc.toDataURL('image/jpeg', 0.5);
     } catch(e) { thumbUrl = ''; }
+    // rarity from AI field directly (before showResultScreen sets _rarity)
+    const rarityForHistory = (result.rarity && ['trash','common','uncommon','rare','epic','legendary'].includes(result.rarity))
+      ? result.rarity : calcRarity(result.sweet_spot);
     addHistory({
       name: result.item_name,
       range: `${formatPrice(result.price_low)}–${formatPrice(result.price_high)}`,
       img: thumbUrl,
       date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      rarity: result._rarity || 'common',
+      rarity: rarityForHistory,
       sweetSpot: result.sweet_spot,
     });
 
